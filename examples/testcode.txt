@@ -1,0 +1,7 @@
+/f {
+	/i 3 =
+	i output
+} =
+/i 2 =
+f
+i output # devrait afficher 2

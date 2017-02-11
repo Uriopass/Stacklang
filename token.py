@@ -110,7 +110,9 @@ def executeTokens(tokens):
 		if tok.type == "var_ope":
 			execVarOperator(tok.value)
 		if tok.type == "func":
+			Global.variables.maps.insert(0, {})
 			executeTokens(Global.blocks[tok.value])
+			del Global.variables.maps[0]
 		if tok.type == "ref":
 			if tok.value in Global.variables:
 				executeTokens([Global.variables[tok.value]])

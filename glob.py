@@ -1,4 +1,5 @@
+from collections import ChainMap
 class Global:
-	variables = {}
+	variables = ChainMap()
 	stack = []
 	blocks = []
