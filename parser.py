@@ -67,7 +67,7 @@ def concatBlocks(tokens, blockref):
 					level -= 1
 			newToks, blockref = concatBlocks(tokens[i+1:j], blockref)
 			argsize = -1
-			retsize = 0
+			retsize = -1
 			if len(newToks) > 2 and newToks[0].type == "int" and newToks[1].type == "blo_siz":
 			    argsize = newToks[0].value
 			    newToks = newToks[2:]

@@ -7,10 +7,9 @@
 	n 3 - 
 	{
 		n i %
-		{} {
-			/premier 0 =
-		}
+		{1} {0}
 		if
+		/premier swap premier * =
 		/i i 1 + =
 	}
 	repeat

@@ -88,13 +88,13 @@ def execVarOperator(operator):
 		condition = Global.stack.pop()
 		if condition == 0:
 			if no.type == "blo_ref":
-				executeTokens(Global.blocks[no.value])
+				executeTokens(Global.blocks[no.value].tokens)
 			else:
 				print("Cannot if on something else than a block")
 				raise
 		else:
 			if yes.type == "blo_ref":
-				executeTokens(Global.blocks[yes.value])
+				executeTokens(Global.blocks[yes.value].tokens)
 			else:
 				print("Cannot if on something else than a block")
 				raise
@@ -131,6 +131,9 @@ def executeTokens(tokens):
 			if block.retsize > 0:
 				for x in afterStack[-block.retsize:]:
 					Global.stack.append(x)
+			elif block.retsize == -1:
+				for x in afterStack:
+					Global.stack.append(x)
 					
 			del Global.variables.maps[0]
 		if tok.type == "ref":
@@ -141,4 +144,4 @@ def executeTokens(tokens):
 			else:
 				print("Undefined variable:", tok.value)
 				raise
-		print(tok.type,"      \t",tok.value,"Stack:",Global.stack)
+		#print(tok.type,"      \t",tok.value,"Stack:",Global.stack)
