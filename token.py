@@ -114,13 +114,24 @@ def executeTokens(tokens):
 			execVarOperator(tok.value)
 		if tok.type == "func":
 			Global.variables.maps.insert(0, {})
-			curStack = list(Global.stack)
+			
 			block = Global.blocks[tok.value]
-			executeTokens(block.tokens)
-			if block.size > 0:
-				Global.stack = curStack + Global.stack[-block.size:]
+			#print(block.argsize, block.retsize)
+			if block.argsize > 0:
+				Global.stack = Global.stack[-block.argsize:]
+				beforeStack = Global.stack[:-block.argsize]
 			else:
-				Global.stack = curStack
+				beforeStack = []
+			
+			executeTokens(block.tokens)
+			
+			afterStack = list(Global.stack)
+			
+			Global.stack = beforeStack
+			if block.retsize > 0:
+				for x in afterStack[-block.retsize:]:
+					Global.stack.append(x)
+					
 			del Global.variables.maps[0]
 		if tok.type == "ref":
 			if tok.value in Global.variables:
@@ -130,4 +141,4 @@ def executeTokens(tokens):
 			else:
 				print("Undefined variable:", tok.value)
 				raise
-		#print(tok.type,"      \t",tok.value,"Stack:",Global.stack)
+		print(tok.type,"      \t",tok.value,"Stack:",Global.stack)

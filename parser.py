@@ -66,16 +66,17 @@ def concatBlocks(tokens, blockref):
 				if tokens[j].value == "}":
 					level -= 1
 			newToks, blockref = concatBlocks(tokens[i+1:j], blockref)
-			size = 0
-			if j+3 < leng:
-			    if tokens[j+1].type == "blo_siz" and tokens[j+3].type == "blo_siz":
-			        if tokens[j+2].type == "int":
-			            size = tokens[j+2].value
-			            j += 3
-			        else:
-			            print("Cannot set size of block return to something else than int")
-			            raise
-			blockref.append(Block(newToks, size))
+			argsize = -1
+			retsize = 0
+			if len(newToks) > 2 and newToks[0].type == "int" and newToks[1].type == "blo_siz":
+			    argsize = newToks[0].value
+			    newToks = newToks[2:]
+			#print(newToks)
+			if len(newToks) > 2 and newToks[-1].type == "int" and newToks[-2].type == "blo_siz":
+			    retsize = newToks[-1].value
+			    newToks = newToks[:-2]
+			
+			blockref.append(Block(newToks, argsize, retsize))
 			
 			tokens = tokens[:i]+[Token(len(blockref)-1, "blo_ref")]+tokens[j+1:]
 			leng = len(tokens)
