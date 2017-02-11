@@ -1,5 +1,6 @@
 from glob import Global
 import token
+import random
 
 def dup():
 	Global.stack.append(Global.stack[-1])
@@ -69,12 +70,29 @@ def swap():
 	value2 = Global.stack.pop()
 	Global.stack.append(value)
 	Global.stack.append(value2)
-	
+
+def rand():
+	value = Global.stack.pop()
+	Global.stack.append(random.randint(0, value))
 	
 def mylen():
 	value = Global.stack.pop()
 	Global.stack.append(len(value))
+
+def leq():
+	value = Global.stack.pop()
+	value2 = Global.stack.pop()
+	Global.stack.append(1 if value <= value2 else 0)
 	
+def geq():
+	value = Global.stack.pop()
+	value2 = Global.stack.pop()
+	Global.stack.append(1 if value >= value2 else 0)
+
+def stoi():
+	Global.stack.append(int(Global.stack.pop()))
+	
+
 functions = {"dup":			dup, 
 			 "repeat":		repeat, 
 			 "swap": 		swap, 
@@ -87,4 +105,8 @@ functions = {"dup":			dup,
 			 "pack":		pack, 
 			 "unpack":		unpack,
 			 "exch":		exch,
-			 "len":			mylen}
+			 "len":			mylen,
+			 "rand":		rand,
+			 "leq":			leq,
+			 "geq":			geq,
+			 "stoi":		stoi}
