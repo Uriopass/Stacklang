@@ -6,9 +6,8 @@ from glob import Global
 
 import stdlib
 
-if len(sys.argv) == 0:
-	print("no argv lel")
-	exit()
+if len(sys.argv) <= 1:
+	raise RuntimeError("No file given")
 
 def execute(line):
 	#print("Parsing", line)
@@ -31,31 +30,6 @@ with open(str(sys.argv[1]), "r+") as file:
 		else:
 			all += line[:commentaire]
 execute(all)
-'''
-def buildRPNTree(root): #Rever polish notation tree
-		while canConsume():
-				cur = consumeToken()
-				if cur[0] == "rel":
-						root.insert(cur)
-						#print(root.childs)
-				elif cur[0] == "var":
-						root.insert(cur)
-				elif cur[0] == "ope":
-						#print("I see", cur)
-						last2 = [root.childs.pop(), root.childs.pop()]
-						#print("Last 2 are", last2)
-						expr = ExprNode(cur)
-						expr.insert(last2[0])
-						expr.insert(last2[1])
-						root.insert(expr)
-				elif cur[0] == "spe":
-						last2 = [root.childs.pop(), root.childs.pop()]
-
-						expr = ExprNode(cur)
-						expr.insert(last2[0])
-						expr.insert(last2[1])
-						root.insert(expr)
-		'''
 '''
 def djistraConv():
 		operatorsPrec = {"+":1, "-":1, "*":2, "/":2, "%": 2, "^": 3, "@":4}

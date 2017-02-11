@@ -54,7 +54,7 @@ def unpack():
 			for x in pack:
 				Global.stack.append(x)
 	else:
-		print("Cannot unpack", pack)
+		raise RuntimeError("Cannot unpack", pack)
 
 def output():
 	print(Global.stack.pop())

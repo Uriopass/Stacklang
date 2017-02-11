@@ -78,8 +78,7 @@ def execVarOperator(operator):
 			elif assign.type == "pack":
 				Global.variables[ref] = assign
 			else:
-				print("Erreur assigning something werid")
-				raise
+				raise RuntimeError("Error assigning value")
 		else:
 			Global.variables[ref] = Token(assign)
 	if operator == "?":
@@ -90,14 +89,12 @@ def execVarOperator(operator):
 			if no.type == "blo_ref":
 				executeTokens(Global.blocks[no.value].tokens)
 			else:
-				print("Cannot if on something else than a block")
-				raise
+				raise RuntimeError("Cannot if on something else than a block")
 		else:
 			if yes.type == "blo_ref":
 				executeTokens(Global.blocks[yes.value].tokens)
 			else:
-				print("Cannot if on something else than a block")
-				raise
+				raise RuntimeError("Cannot if on something else than a block")
 
 def executeTokens(tokens):
 	for tok in tokens:
@@ -116,7 +113,7 @@ def executeTokens(tokens):
 			Global.variables.maps.insert(0, {})
 			
 			block = Global.blocks[tok.value]
-			#print(block.argsize, block.retsize)
+			
 			if block.argsize > 0:
 				Global.stack = Global.stack[-block.argsize:]
 				beforeStack = Global.stack[:-block.argsize]
@@ -142,6 +139,5 @@ def executeTokens(tokens):
 			elif tok.value in functions:
 				functions[tok.value]()
 			else:
-				print("Undefined variable:", tok.value)
-				raise
+				raise RuntimeError("Undefined variable or function :", tok.value)
 		#print(tok.type,"      \t",tok.value,"Stack:",Global.stack)
