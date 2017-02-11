@@ -13,7 +13,7 @@ def repeat():
 	
 	if block.type == "blo_ref":
 		for x in range(nb):
-			token.executeTokens(Global.blocks[block.value])
+			token.executeTokens(Global.blocks[block.value].tokens)
 	else:
 		print("Cannot if on something else than a block")
 
