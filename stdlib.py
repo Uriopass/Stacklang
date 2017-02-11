@@ -48,7 +48,7 @@ def unpack():
 		for x in pack.value:
 			Global.stack.append(x)
 	elif type(pack) == str:
-		if(len(pack) == 1):
+		if len(pack) == 1:
 			Global.stack.append(ord(pack[0]))
 		else:
 			for x in pack:

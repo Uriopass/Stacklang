@@ -10,7 +10,7 @@ class Token:
 	
 	def __init__(self, value, type = None):
 		#print(value)
-		if(type == None):
+		if type == None:
 			self.type = Token.typeFromValue(value)
 		else:
 			self.type = type
@@ -72,7 +72,7 @@ def execVarOperator(operator):
 	if operator == "=":
 		assign = Global.stack.pop()
 		ref = Global.stack.pop()
-		if(type(assign) == Token):
+		if type(assign) == Token:
 			if assign.type == "blo_ref":
 				Global.variables[ref] = Token(assign.value, "func")
 			elif assign.type == "pack":
