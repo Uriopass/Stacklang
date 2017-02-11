@@ -1,0 +1,26 @@
+/if {?} =
+
+/isprime {
+	/n 2 getpush =
+	/premier 1 =
+	/i 2 =
+	n 3 - 
+	{
+		n i %
+		{} {
+			/premier 0 =
+		}
+		if
+		/i i 1 + =
+	}
+	repeat
+	premier
+} =
+
+/val 2 =
+9 {
+	val isprime
+	stack
+	pop pop
+	/val val 1 + =
+} repeat
