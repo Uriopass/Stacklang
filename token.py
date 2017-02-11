@@ -6,6 +6,7 @@ class Token:
 	math_operators = ["+", "-", "*", "/", "^", "%", "!"]
 	var_operators = ["=", "?"]
 	separators = [" ", "\n", "\t"]
+	blocksize = ["<", ">"]
 	
 	def __init__(self, value, type = None):
 		#print(value)
@@ -28,6 +29,8 @@ class Token:
 			return "sep"
 		if value in Token.blocks:
 			return "blo"
+		if value in Token.blocksize:
+			return "blo_siz"
 		if type(value) == int:
 			return "int"
 		if type(value) == str:
@@ -111,7 +114,13 @@ def executeTokens(tokens):
 			execVarOperator(tok.value)
 		if tok.type == "func":
 			Global.variables.maps.insert(0, {})
-			executeTokens(Global.blocks[tok.value])
+			curStack = list(Global.stack)
+			block = Global.blocks[tok.value]
+			executeTokens(block.tokens)
+			if block.size > 0:
+				Global.stack = curStack + Global.stack[-block.size:]
+			else:
+				Global.stack = curStack
 			del Global.variables.maps[0]
 		if tok.type == "ref":
 			if tok.value in Global.variables:

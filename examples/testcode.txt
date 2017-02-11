@@ -1,7 +1,5 @@
 /f {
-	/i 3 =
-	i output
-} =
-/i 2 =
-f
-i output # devrait afficher 2
+	2
+}<1> =
+f 1 +
+output

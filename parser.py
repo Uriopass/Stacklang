@@ -1,4 +1,5 @@
 from token import Token
+from block import Block
 def parseTokens(line):
 	i = 0
 	leng = len(line)
@@ -46,9 +47,6 @@ def parseTokens(line):
 			code.append(Token(base))
 		else:
 			code.append(Token(car))
-		if code[-1].type == "ukn":
-			print("Unkown token:", code.pop().value, "Removing..")
-			
 		i += 1
 	return code
 
@@ -68,7 +66,17 @@ def concatBlocks(tokens, blockref):
 				if tokens[j].value == "}":
 					level -= 1
 			newToks, blockref = concatBlocks(tokens[i+1:j], blockref)
-			blockref.append(newToks)
+			size = 0
+			if j+3 < leng:
+			    if tokens[j+1].type == "blo_siz" and tokens[j+3].type == "blo_siz":
+			        if tokens[j+2].type == "int":
+			            size = tokens[j+2].value
+			            j += 3
+			        else:
+			            print("Cannot set size of block return to something else than int")
+			            raise
+			blockref.append(Block(newToks, size))
+			
 			tokens = tokens[:i]+[Token(len(blockref)-1, "blo_ref")]+tokens[j+1:]
 			leng = len(tokens)
 		i += 1	 
