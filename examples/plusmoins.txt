@@ -1,0 +1,25 @@
+/if {?} =
+
+/test {1>
+	"Entrez un nombre" output
+	/in input stoi =
+	in nb -
+	{
+		in nb leq 
+		{
+			"Plus petit" output
+		}
+		{
+			"Plus grand" output
+		}
+		if
+		test
+	}
+	{
+		"Bravo!" output
+	}
+	if
+} =
+
+/nb 100 rand =
+test
