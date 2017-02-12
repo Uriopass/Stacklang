@@ -109,9 +109,6 @@ def stoi():
 	Global.stack.append(int(value))
 
 def mydef():
-	token.execVarOperator("=")
-	
-def myif():
 	token.execVarOperator("?")
 
 def enablelocalstack():
