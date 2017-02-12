@@ -124,7 +124,7 @@ while
 
 ## Recursion
 
-Recursion works in Stacklang by calling what you are currently defining.
+Stacklang supports recursion
 
 ```Python
 # Here is factorial using recursion :
@@ -145,7 +145,7 @@ Recursion works in Stacklang by calling what you are currently defining.
 
 ## All stack functions
 
-Here is an exhaustive list of all the basic operators in the standard library :
+Here is an exhaustive list of all the basic operators in the standard library
 
 ### Math operators
 
@@ -154,61 +154,61 @@ Maths operators (except "!") all work by popping 2 inputs and pushing 1 output c
 `i` is the number of input that are popped and `o` is the number of output pushed
 They respect the relation len(oldstack) - i + o = len(newstack)
 
-| Operator | Name | i     |    o  | Description | Example |
-| :------: | :---:| :---: | :---: | :---------: | :-----: |
-| +        | Add  | 2     | 1     | Add the two numbers on top of the stacks | `3 2 + # Stack is now [5]`
+| Operator | Name | i     |    o  | Description                                     | Example
+| :------: | :---:| :---: | :---: | :---------------------------------------------: | :-----:
+| +        | Add  | 2     | 1     | Add the two numbers on top of the stacks        | `3 2 + # Stack is now [5]`
 | -        | Sub  | 2     | 1     | Substracts the two numbers on top of the stacks | `3 2 - # [1]`
-| \*       | Mul  | 2     | 1     | Multiply the two numbers on top of the stacks | `3 2 * # [6]`
-| /        | Div  | 2     | 1     | Divide the two numbers on top of the stacks | `4 2 / # [2]`
-| ^        | Pow  | 2     | 1     | Add the two numbers on top of the stacks | `2 3 ^ # [8]`
-| %        | Mod  | 2     | 1     | Add the two numbers on top of the stacks | `5 2 % # [1]`
-| !        | Fac  | 1     | 1     | Add the two numbers on top of the stacks | `3 ! # [6]`
+| \*       | Mul  | 2     | 1     | Multiply the two numbers on top of the stacks   | `3 2 * # [6]`
+| /        | Div  | 2     | 1     | Divide the two numbers on top of the stacks     | `4 2 / # [2]`
+| ^        | Pow  | 2     | 1     | Add the two numbers on top of the stacks        | `2 3 ^ # [8]`
+| %        | Mod  | 2     | 1     | Add the two numbers on top of the stacks        | `5 2 % # [1]`
+| !        | Fac  | 1     | 1     | Add the two numbers on top of the stacks        | `3 ! # [6]`
 
 ### Stack manipulations
 
 Theses operator only manipulate the stack and don't add additional data
 
-| Operator | Name | i     |    o  | Description | Example |
-| :------: | :---:| :---: | :---: | :---------: | :-----: |
-| exch        | Exchange      | 1  | 0  | Exchange the top and the (top - val) values  | `[1, 2, 3] => 2 exch => [3, 2, 1]`
-| swap        | Swap          | 2  | 2  | Equivalent to `1 exch`, swap the two top items | `[1, 2, 3] => swap => [1, 3, 2]`
-| getpush     | Get and Push  | 1  | 1  | Gets and push the nth element from the top | `[1, 2, 3] => 2 getpush => [1, 2, 3, 1]`
-| dup         | Duplicate     | 1  | 2  | Equivalent to 0 getpush. Duplicate the top of the stack | `[1, 2, 3] => dup => [1, 2, 3, 3]`
-| pop         | Pop           | 1  | 0 | Remove the top of the stack | `[1, 2, 3] => pop => [1, 2]`
-| pack        | Package       | 1  | ?  | Pack the n element from the top of the stack into 1 element | `[1, 2, 3] => 2 pack => [1, pack [2, 3]]`
-| unpack      | Unpack        | 0  | ?  | Unpack the input if it's a pack or a string | `[1, pack [2, 3]] => unpack => [1, 2, 3]`
+| Operator    | Name          | i   |  o  | Description                                                 | Example
+| :---------: | :------------:| :-: | :-: | :---------------------------------------------------------: | :-----:
+| exch        | Exchange      |  1  |  0  | Exchange the top and the (top - val) values                 | `[1, 2, 3] => 2 exch => [3, 2, 1]`
+| swap        | Swap          |  2  |  2  | Equivalent to `1 exch`, swap the two top items              | `[1, 2, 3] => swap => [1, 3, 2]`
+| getpush     | Get and Push  |  1  |  1  | Gets and push the nth element from the top                  | `[1, 2, 3] => 2 getpush => [1, 2, 3, 1]`
+| dup         | Duplicate     |  1  |  2  | Equivalent to 0 getpush. Duplicate the top of the stack     | `[1, 2, 3] => dup => [1, 2, 3, 3]`
+| pop         | Pop           |  1  |  0  | Remove the top of the stack                                 | `[1, 2, 3] => pop => [1, 2]`
+| pack        | Package       |  1  |  ?  | Pack the n element from the top of the stack into 1 element | `[1, 2, 3] => 2 pack => [1, pack [2, 3]]`
+| unpack      | Unpack        | 0  | ?  | Unpack the input if it's a pack or a string                   | `[1, pack [2, 3]] => unpack => [1, 2, 3]`
 
 ### Input/Output
 
-| Operator | Name | i     |    o  | Description | Example |
-| :------: | :---:| :---: | :---: | :---------: | :-----: |
-| input    | Input    | 0  | 1  | Asks the user for input and push it  | `[] => input => ["?"]`
-| output   | Output   | 1  | 0  | Outputs the current top of the stack | `[1, 2, 3] => output => [1, 2] # Prints "3"`
-| rand     | Random   | 1  | 1  | Add a random number to the top of the stack between 1 and n | `[1, 2] => 10 rand => [1, 2, 7 or 3 or ?]`
+| Operator | Name   | i   |  o  | Description                                                 | Example
+| :------: | :-----:| :-: | :-: | :---------------------------------------------------------: | :-----:
+| input    | Input  |  0  |  1  | Asks the user for input and push it                         | `[] => input => ["?"]`
+| output   | Output |  1  |  0  | Outputs the current top of the stack                        | `[1, 2, 3] => output => [1, 2] # Prints "3"`
+| rand     | Random |  1  |  1  | Add a random number to the top of the stack between 1 and n | `[1, 2] => 10 rand => [1, 2, 7 or 3 or ?]`
 
 ### Utils
 
-| Operator | Name | i     |    o  | Description | Example |
-| :------: | :---:| :---: | :---: | :---------: | :-----: |
-| stoi     | String to Integer | 1  | 1  | Convert a string to the integer corresponding if possible  | `[1, 2, "3"] => stoi => [1, 2, 3]`
-| len      | Length            | 1  | 1  | Push the length of top of the stack | `[1, 2, "test"] => len => [1, 2, 3]`
+| Operator | Name              | i   |  o  | Description                                                | Example
+| :------: | :----------------:| :-: | :-: | :--------------------------------------------------------: | :-----:
+| stoi     | String to Integer |  1  |  1  | Convert a string to the integer corresponding if possible  | `[1, 2, "3"] => stoi => [1, 2, 3]`
+| len      | Length            |  1  |  1  | Push the length of top of the stack                        | `[1, 2, "test"] => len => [1, 2, 3]`
 
 **Note** : `stoi` is often used by doing `/in input stoi def`
 
 ### Debug
 
-| Operator | Name | i     |    o  | Description | Example |
-| :------: | :---:| :---: | :---: | :---------: | :-----: |
-| variables | Variables | 0  | 0  | Prints the current variables ChainMap | `/a 1 def variables => {"a": int 1}`
-| stack     | Stack     | 0  | 0  | Prints the current stack              | `[1, 2] => stack => Prints [1, 2]`
+| Operator  | Name      |  i  |  o  | Description                           | Example
+| :------:  | :--------:| :-: | :-: | :-----------------------------------: | :-----:
+| variables | Variables |  0  |  0  | Prints the current variables ChainMap | `/a 1 def variables => {"a": int 1}`
+| stack     | Stack     |  0  |  0  | Prints the current stack              | `[1, 2] => stack => Prints [1, 2]`
 
 ### Conditions operator
 
-| Operator | Name | i     |    o  | Description | Example |
-| :------: | :---:| :---: | :---: | :---------: | :-----: |
-| leq     | Less than or Equal    | 2  | 1  | Push 1 if a <= b and 0 if b > a  | `[1, 2] => leq => [1]`
-| geq     | Greater than or Equal | 2  | 1  | Push 1 if a >= b and 0 if b < a  | `[1, 2] => geq => [0]`
-| eq      | Equal                 | 2  | 1  | Push 1 if a == b and 0 if a != b | `[1, 2] => eq  => [0]`
+| Operator | Name                  | i   |  o  | Description                      | Example
+| :------: | :--------------------:| :-: | :-: | :------------------------------: | :-----:
+| leq      | Less than or Equal    |  2  |  1  | Push 1 if a <= b and 0 if b > a  | `[1, 2] => leq => [1]`
+| geq      | Greater than or Equal |  2  |  1  | Push 1 if a >= b and 0 if b < a  | `[1, 2] => geq => [0]`
+| eq       | Equal                 |  2  |  1  | Push 1 if a == b and 0 if a != b | `[1, 2] => eq  => [0]`
 
 ## Advanced function definition
 
