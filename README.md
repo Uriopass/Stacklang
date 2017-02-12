@@ -1,5 +1,5 @@
 # Stacklang
-A Python3 interpreter for an home-made stack based language heavily inspired from PostScript
+An home-made interpreter written in Python3 for a custom stack-based language heavily inspired from PostScript
 
 ### How to install :
 1. Install python3 if you don't have it already  
@@ -8,24 +8,24 @@ A Python3 interpreter for an home-made stack based language heavily inspired fro
 
 # Specifications
 
-Stacklang is a Stack based language, which mean it does almost all of it's operation using a stack for the values  
+Stacklang is a Stack based language, which mean it executes almost all operations using a global stack for the values
 
-It uses the Reverse Polish Notation (or postfix notation).  
-An example of RPN would be `3 2 +` which add 3 and 2 in this order.
+A basic introduction would be the way Reverse Polish Notation (or postfix notation) works.  
+An example of RPN is `3 2 +` which add 3 and 2 in this order.
 
-Basically 3 and 2 are pushed on the stack, and + is an operator that pop theses 2 items and push the result.
+Basically `3` and `2` are pushed on the stack, and `+` is an operator that pop theses 2 items and push the result.
 
 There are multiples cool operators defined below for manipulating, and adding data to the stack.
 
 ## Comments
 
 Comments work the same way as in Python, i.e using `#`  
-They are no multi lines comment for the moment.
+There are no multi lines comment for the moment.
 
 ## Variables
 
-As in any language there are variables in Stacklang, they use Dynamic Linking as the scoping system.  
-Their names are defined using `/name` and they are assigned using the `def` operator
+As in any language there are variables in Stacklang, they use Dynamic Linking for the scoping system.  
+Defining is done by using `/name`, and assigning using the `def` operator.
 
 Here is an example for defining a hundred :
 ``` Python
@@ -33,19 +33,20 @@ Here is an example for defining a hundred :
 one_hundred 3 + # Pushed 103 to the stack
 ```
 
-**Note** : There are no global variables for the moments
+**Note** : There are no global variables for the moment.
 
 ## Blocks
 
-Stacklang manages the functions and if and while etc. using blocks. Blocks are simply a list of operations and main is just a big block.
+Stacklang manages the functions and if and while etc. using blocks.  
+Blocks are simply a list of operations.
 
 ```Python
 {
-	3 2 + # This blocks is simply the commands push 3, push 2, add.
+	3 2 + # This block is simply the commands push 3, push 2, add.
 }
 ```
 
-**Warning** : Blocks are not executed when they are simply put in the middle of the code, actually they are just pushed onto the stack as a "block reference" to use for other operators.
+**Warning** : Blocks are not executed when they are simply put in the middle of a code, actually they are just pushed onto the stack as a "block reference" to use for other operators like `def`.
 
 ## Functions
 
@@ -53,46 +54,49 @@ A function is just a variable that has been assigned a block, and when they are 
 
 ```Python
 /add_3 {3 +} def
-5 add_3 # Push 8 on the stack
+5 add_3 # The stack is now [8]
 ```
 
 ## Conditions
 
-They are no booleans in Stacklang for the moment, so if there is a condition anywhere it is just testing an int with 0. i.e `test = value != 0`
+There are no booleans in Stacklang for the moment, so if there is a condition anywhere it is just testing an int with 0. i.e `test = value != 0`.
 
-The `if` operator is actually `?`, but you can just set `if` as `?` easily using functions
+The `if` operator is actually `?`, but you can just set `if` as `?` easily using functions as demonstrated here :
+
 ```Python
-/if {?} def # Change if to do an "?" operation
+/if {?} def # Changes if to do a "?" operation
 ```
 
 The `?` operator works by taking 3 arguments from the stack :  
 - A condition
-- A "true" block
-- A "false" block.
+- A `true` block
+- A `false` block.
 
-If the condition is true (i.e different from 0) then the "true" block is executed, if not the "false" block is.
+If the condition is true (i.e different from 0) then the `true` block is executed, if not the `false` block is.
 
 ```Python
 /value 3 def
 value 3 - # if value = 3 then value - 3 == 0
 {
-	# value is not three
+	"Value is not three" # This is the true block
 }
 {
-	# value is three
+	"Value is three" # This is the false block
 }
 ?   # if operator
+# Stack is now ["Value is three"]
 ```
 
 ## Loops
 
-There are 2 kinds of loops in Stacklang for the moment
+There are 2 kinds of loops in Stacklang for the moment  
 
 ### Repeat
 
 The `repeat` loop gets 2 values from the stack :
 - a number of repetition
 - a block to repeat
+
 ```Python
 5 {
 	3
@@ -113,7 +117,7 @@ while # Tests the condition and execute block if the condition is true, start ov
 
 #Example :
 /i 3 def
-{ i } # tests for i == 0
+{ i } # tests for i != 0
 {
 	/i 1 - def # i -= 1
 	i # Puts i on the stack
@@ -130,7 +134,7 @@ Stacklang supports recursion
 # Here is factorial using recursion :
 /fact
 {
-	dup 1 - # "dup" duplicates the top of the stack (here the input). Then test for input = 1
+	dup 1 - # "dup" duplicate the top of the stack (here, the input). Then tests for input != 1
 	{
 		dup 1 - fact * # Returns input * fact(input - 1)
 	}
@@ -145,14 +149,14 @@ Stacklang supports recursion
 
 ## All stack functions
 
-Here is an exhaustive list of all the basic operators in the standard library
+Here is an exhaustive list of all the basic operators in the standard library :
 
 ### Math operators
 
-Maths operators (except "!") all work by popping 2 inputs and pushing 1 output corresponding to the result
+Maths operators (except "!") all work by popping 2 inputs and pushing 1 output corresponding to the result.
 
-`i` is the number of input that are popped and `o` is the number of output pushed
-They respect the relation len(oldstack) - i + o = len(newstack)
+`i` is the number of input that are popped and `o` is the number of output pushed.  
+They respect the relation `len(oldstack) - i + o = len(newstack)`
 
 | Operator | Name | i     |    o  | Description                                     | Example
 | :------: | :---:| :---: | :---: | :---------------------------------------------: | :-----:
@@ -166,7 +170,7 @@ They respect the relation len(oldstack) - i + o = len(newstack)
 
 ### Stack manipulations
 
-Theses operator only manipulate the stack and don't add additional data
+These operators only manipulate the stack and don't add any additional data
 
 | Operator    | Name          | i   |  o  | Description                                                 | Example
 | :---------: | :------------:| :-: | :-: | :---------------------------------------------------------: | :-----:
