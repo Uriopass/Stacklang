@@ -1,15 +1,10 @@
-disablelocalstack
-/iteration {
-	dup 2 % {
-		3 * 1 + 2 /
-	} {
-		2 /
-	} ?
+enablelocalstack
+/f {1> 
+	/n = #Set n to the input
+	10 {
+		n
+	} repeat # Pushed 10x n to the stack
+	>2 # Only returns 2 of thems (the 2 top ones)
 } =
-"Enter a number to test" output
-/x input stoi =
-{ x 4 - }
-{ /x x iteration =
-	 x output }
-while
-"found 4, over" output
+
+3 f 2 pack output # Prints pack [3, 3]

@@ -4,4 +4,4 @@ class Global:
 	stack = []
 	refdefstack = []
 	blocks = []
-	localstackenabled = True
+	localstackenabled = False

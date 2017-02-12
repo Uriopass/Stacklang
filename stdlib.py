@@ -31,17 +31,12 @@ def mywhile():
 			yes = Global.stack.pop() != 0
 	else:
 		raise RuntimeError("Cannot while on something else than blocks")
-def exch():
-	a = Global.stack.pop()
-	b = Global.stack.pop()
-	Global.stack.append(a)
-	Global.stack.append(b)
-
+		
 def inputAsked():
 	Global.stack.append('"'+input()+'"')
 
 def getpush():
-	Global.stack.append(Global.stack[-Global.stack.pop()])
+	Global.stack.append(Global.stack[-Global.stack.pop()-1])
 	
 def stack():
 	print(Global.stack)
@@ -75,8 +70,8 @@ def output():
 def exch():
 	ind = Global.stack.pop()
 	value = Global.stack.pop()
-	Global.stack.append(Global.stack[-ind])
-	Global.stack[-ind-1] = value
+	Global.stack.append(Global.stack[-ind-1])
+	Global.stack[-ind-2] = value
 
 def swap():
 	value = Global.stack.pop()
@@ -101,6 +96,11 @@ def geq():
 	value = Global.stack.pop()
 	value2 = Global.stack.pop()
 	Global.stack.append(1 if value >= value2 else 0)
+	
+def eq():
+	value = Global.stack.pop()
+	value2 = Global.stack.pop()
+	Global.stack.append(1 if value == value2 else 0)
 
 def stoi():
 	value = Global.stack.pop()

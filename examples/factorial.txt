@@ -1,0 +1,13 @@
+/fact 
+{
+	dup 1 - # "dup" duplicates the top of the stack, here the input. Then test for input = 1
+	{
+		dup 1 - fact * # Returns input * fact(input - 1)
+	}
+	{
+		1 # Returns 1 since input = 1
+	}
+	?
+} =
+
+6 fact # Puts 120 on the stack
