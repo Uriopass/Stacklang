@@ -1,22 +1,2 @@
-/test {
-	"Entrez un nombre" output
-	/in input =
-	in nb -
-	{
-		"Bravo!" output
-	}
-	{
-		in nb leq 
-		{
-			"Plus grand" output
-		}
-		{
-			"Plus petit" output
-		}
-		if
-	}
-	if
-}
-
-/nb 100 rand =
-test
+/x /y 2 3 = =
+variables

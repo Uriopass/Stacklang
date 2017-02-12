@@ -44,10 +44,10 @@ def pack():
 
 def unpack():
 	pack = Global.stack.pop()
-	if type(pack) == token.Token and pack.type == "pack":
+	if isinstance(pack, token.Token) and pack.type == "pack":
 		for x in pack.value:
 			Global.stack.append(x)
-	elif type(pack) == str:
+	elif isinstance(pack, str):
 		if len(pack) == 1:
 			Global.stack.append(ord(pack[0]))
 		else:

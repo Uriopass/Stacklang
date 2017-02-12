@@ -1,6 +1,7 @@
 from glob import Global
 from stdlib import functions
 import math
+
 class Token:
 	blocks = ["{", "}"]
 	math_operators = ["+", "-", "*", "/", "^", "%", "!"]
@@ -31,9 +32,9 @@ class Token:
 			return "blo"
 		if value in Token.blocksize:
 			return "blo_siz"
-		if type(value) == int:
+		if isinstance(value, int):
 			return "int"
-		if type(value) == str:
+		if isinstance(value, str):
 			if value[0] == "'" or value[0] == '"':
 				return "str"
 			elif value[0] == "/":
@@ -47,7 +48,7 @@ class Token:
 	
 	def __repr__(self):
 		return self.__str__()
-	
+
 def execMathOperator(ope):
 	val = ope
 	if val == "!":
@@ -71,8 +72,8 @@ def execMathOperator(ope):
 def execVarOperator(operator):
 	if operator == "=":
 		assign = Global.stack.pop()
-		ref = Global.stack.pop()
-		if type(assign) == Token:
+		ref = Global.refdefstack.pop()
+		if isinstance(assign, Token):
 			if assign.type == "blo_ref":
 				Global.variables[ref] = Token(assign.value, "func")
 			elif assign.type == "pack":
@@ -99,8 +100,10 @@ def execVarOperator(operator):
 def executeTokens(tokens):
 	for tok in tokens:
 		#print(tok)
-		if tok.type == "int" or tok.type == "str" or tok.type == "ref_def":
+		if tok.type == "int" or tok.type == "str":
 			Global.stack.append(tok.value)
+		if tok.type == "ref_def":
+			Global.refdefstack.append(tok.value)
 		if tok.type == "blo_ref":
 			Global.stack.append(tok)
 		if tok.type == "pack":
