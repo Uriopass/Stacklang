@@ -108,6 +108,9 @@ def stoi():
 		value = value[1:-1]
 	Global.stack.append(int(value))
 
+def mydef():
+	token.execVarOperator("?")
+
 def enablelocalstack():
 	Global.localstackenabled = True
 
@@ -134,4 +137,5 @@ functions = {"dup":					dup,
 			 "stoi":				stoi,
 			 "while":				mywhile,
 			 "enablelocalstack": 	enablelocalstack,
-			 "disablelocalstack": 	disablelocalstack}
+			 "disablelocalstack": 	disablelocalstack,
+			 "def":					mydef}
