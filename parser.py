@@ -9,9 +9,9 @@ def parseTokens(line):
 	while i < leng:
 		car = line[i]
 		
-		if "0" <= car <= "9":
+		if car.isdigit():
 			base = ""
-			while i < leng and "0" <= line[i] <= "9":
+			while i < leng and line[i].isdigit():
 				base += line[i]
 				i += 1
 			i -= 1
@@ -27,23 +27,24 @@ def parseTokens(line):
 			
 			code.append(Token(base))
 			
-		elif "a" <= car <= "z" or "A" <= car <= "Z":
+		elif car.isalpha():
 			base = ""
-			while i < leng and ("_" == line[i] or "0" <= line[i] <= "9" or "a" <= line[i] <= "z" or "A" <= line[i] <= "Z"):
+			while i < leng and (line[i] == "_" or line[i].isalpha() or line[i].isdigit()):
 				base += line[i]
 				i += 1
 			i -= 1
 			code.append(Token(base))
+			
 		elif car in Token.separators:
 			pass
-		elif car == "/":
-			if i+1 < leng and "a" <= line[i+1] <= "z" or "A" <= line[i+1] <= "Z":
-				base = "/"
+			
+		elif car == "/" and i+1 < leng and line[i+1].isalpha():
+			base = "/"
+			i += 1
+			while i < leng and (line[i] == "_" or line[i].isalpha() or line[i].isdigit()):
+				base += line[i]
 				i += 1
-				while i < leng and ("_" == line[i] or "0" <= line[i] <= "9" or "a" <= line[i] <= "z" or "A" <= line[i] <= "Z"):
-					base += line[i]
-					i += 1
-				i -= 1
+			i -= 1
 			code.append(Token(base))
 		else:
 			code.append(Token(car))
@@ -69,12 +70,12 @@ def concatBlocks(tokens, blockref):
 			argsize = -1
 			retsize = -1
 			if len(newToks) > 2 and newToks[0].type == "int" and newToks[1].type == "blo_siz":
-			    argsize = newToks[0].value
-			    newToks = newToks[2:]
+				argsize = newToks[0].value
+				newToks = newToks[2:]
 			#print(newToks)
 			if len(newToks) > 2 and newToks[-1].type == "int" and newToks[-2].type == "blo_siz":
-			    retsize = newToks[-1].value
-			    newToks = newToks[:-2]
+				retsize = newToks[-1].value
+				newToks = newToks[:-2]
 			
 			blockref.append(Block(newToks, argsize, retsize))
 			

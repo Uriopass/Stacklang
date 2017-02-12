@@ -12,12 +12,25 @@ def repeat():
 	block = Global.stack.pop()
 	nb = Global.stack.pop()
 	
-	if block.type == "blo_ref":
+	if isinstance(block, token.Token) and block.type == "blo_ref":
 		for x in range(nb):
 			token.executeTokens(Global.blocks[block.value].tokens)
 	else:
-		print("Cannot if on something else than a block")
+		raise RuntimeError("Cannot if on something else than a block")
 
+def mywhile():
+	block = Global.stack.pop()
+	condition = Global.stack.pop()
+	if isinstance(block, token.Token) and isinstance(condition, token.Token) and block.type == "blo_ref" and condition.type == "blo_ref":
+		token.executeTokens(Global.blocks[condition.value].tokens)
+		yes = Global.stack.pop() != 0
+		while yes:
+			token.executeTokens(Global.blocks[block.value].tokens)
+			
+			token.executeTokens(Global.blocks[condition.value].tokens)
+			yes = Global.stack.pop() != 0
+	else:
+		raise RuntimeError("Cannot while on something else than blocks")
 def exch():
 	a = Global.stack.pop()
 	b = Global.stack.pop()
@@ -25,7 +38,7 @@ def exch():
 	Global.stack.append(b)
 
 def inputAsked():
-	Global.stack.append(input())
+	Global.stack.append('"'+input()+'"')
 
 def getpush():
 	Global.stack.append(Global.stack[-Global.stack.pop()])
@@ -90,23 +103,35 @@ def geq():
 	Global.stack.append(1 if value >= value2 else 0)
 
 def stoi():
-	Global.stack.append(int(Global.stack.pop()))
+	value = Global.stack.pop()
+	if value[0] == "'" or value[0] == '"':
+		value = value[1:-1]
+	Global.stack.append(int(value))
+
+def enablelocalstack():
+	Global.localstackenabled = True
+
+def disablelocalstack():
+	Global.localstackenabled = False
 	
 
-functions = {"dup":			dup, 
-			 "repeat":		repeat, 
-			 "swap": 		swap, 
-			 "getpush":		getpush, 
-			 "pop":			pop, 
-			 "variables":	variables, 
-			 "stack":		stack, 
-			 "input":		inputAsked, 
-			 "output": 		output,
-			 "pack":		pack, 
-			 "unpack":		unpack,
-			 "exch":		exch,
-			 "len":			mylen,
-			 "rand":		rand,
-			 "leq":			leq,
-			 "geq":			geq,
-			 "stoi":		stoi}
+functions = {"dup":					dup, 
+			 "repeat":				repeat, 
+			 "swap": 				swap, 
+			 "getpush":				getpush, 
+			 "pop":					pop, 
+			 "variables":			variables, 
+			 "stack":				stack, 
+			 "input":				inputAsked, 
+			 "output": 				output,
+			 "pack":				pack, 
+			 "unpack":				unpack,
+			 "exch":				exch,
+			 "len":					mylen,
+			 "rand":				rand,
+			 "leq":					leq,
+			 "geq":					geq,
+			 "stoi":				stoi,
+			 "while":				mywhile,
+			 "enablelocalstack": 	enablelocalstack,
+			 "disablelocalstack": 	disablelocalstack}

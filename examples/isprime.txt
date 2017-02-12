@@ -1,26 +1,25 @@
+disablelocalstack
 /if {?} =
 
-/isprime { 1>
+/isprime {
 	/n =
-	/premier 1 =
 	/i 2 =
-	n 3 - 
-	{0>
-		n i %
-		{0>1} {0>0}
-		if
-		/premier premier * =
+	{n i %}
+	{
 		/i i 1 + =
-	>0}
-	repeat
-	premier
+	}
+	while
+	
+	n i -
 } =
-2713 isprime
 
-#/val 2 =
-#10000 {
-#	val isprime
-	stack
-#	pop pop
-#	/val val 1 + =
-#} repeat
+"Enter a number to test" output
+/in input stoi =
+in isprime dup
+{
+	"The number you entered is not prime because divisor" output
+	in swap - output
+} 
+{ 
+	"The number you entered is prime" output
+} ?

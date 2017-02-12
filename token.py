@@ -32,7 +32,7 @@ class Token:
 			return "blo"
 		if value in Token.blocksize:
 			return "blo_siz"
-		if isinstance(value, int):
+		if isinstance(value, int) or isinstance(value, float):
 			return "int"
 		if isinstance(value, str):
 			if value[0] == "'" or value[0] == '"':
@@ -116,24 +116,26 @@ def executeTokens(tokens):
 			Global.variables.maps.insert(0, {})
 			
 			block = Global.blocks[tok.value]
+			if Global.localstackenabled:
 			
-			if block.argsize > 0:
-				Global.stack = Global.stack[-block.argsize:]
-				beforeStack = Global.stack[:-block.argsize]
-			else:
-				beforeStack = []
+				if block.argsize > 0:
+					Global.stack = Global.stack[-block.argsize:]
+					beforeStack = Global.stack[:-block.argsize]
+				else:
+					beforeStack = []
 			
 			executeTokens(block.tokens)
 			
-			afterStack = list(Global.stack)
+			if Global.localstackenabled:			
+				afterStack = list(Global.stack)
 			
-			Global.stack = beforeStack
-			if block.retsize > 0:
-				for x in afterStack[-block.retsize:]:
-					Global.stack.append(x)
-			elif block.retsize == -1:
-				for x in afterStack:
-					Global.stack.append(x)
+				Global.stack = beforeStack
+				if block.retsize > 0:
+					for x in afterStack[-block.retsize:]:
+						Global.stack.append(x)
+				elif block.retsize == -1:
+					for x in afterStack:
+						Global.stack.append(x)
 					
 			del Global.variables.maps[0]
 		if tok.type == "ref":
