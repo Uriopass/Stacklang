@@ -176,7 +176,7 @@ Theses operator only manipulate the stack and don't add additional data
 | dup         | Duplicate     |  1  |  2  | Equivalent to 0 getpush. Duplicate the top of the stack     | `[1, 2, 3] => dup => [1, 2, 3, 3]`
 | pop         | Pop           |  1  |  0  | Remove the top of the stack                                 | `[1, 2, 3] => pop => [1, 2]`
 | pack        | Package       |  1  |  ?  | Pack the n element from the top of the stack into 1 element | `[1, 2, 3] => 2 pack => [1, pack [2, 3]]`
-| unpack      | Unpack        | 0  | ?  | Unpack the input if it's a pack or a string                   | `[1, pack [2, 3]] => unpack => [1, 2, 3]`
+| unpack      | Unpack        |  0  | ?  | Unpack the input if it's a pack or a string                   | `[1, pack [2, 3]] => unpack => [1, 2, 3]`
 
 ### Input/Output
 
