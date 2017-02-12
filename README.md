@@ -61,13 +61,9 @@ A function is just a variable that has been assigned a block, and when they are 
 
 There are no booleans in Stacklang for the moment, so if there is a condition anywhere it is just testing an int with 0. i.e `test = value != 0`.
 
-The `if` operator is actually `?`, but you can just set `if` as `?` easily using functions as demonstrated here :
+Conditions are done using the `if` operator.
 
-```Python
-/if {?} def # Changes if to do a "?" operation
-```
-
-The `?` operator works by taking 3 arguments from the stack :  
+The `if` operator works by taking 3 arguments from the stack :  
 - A condition
 - A `true` block
 - A `false` block.
@@ -83,7 +79,7 @@ value 3 - # if value = 3 then value - 3 == 0
 {
 	"Value is three" # This is the false block
 }
-?   # if operator
+if
 # Stack is now ["Value is three"]
 ```
 
@@ -141,7 +137,7 @@ Stacklang supports recursion
 	{
 		1 # Returns 1 since input = 1
 	}
-	?
+	if
 } def
 
 6 fact # Puts 120 on the stack
@@ -224,7 +220,7 @@ For example `+` takes 2 inputs and 1 output. So we could define `add` as
 ```
 
 Theses are of course optional and you need to do the `enablelocalstack` command to activate this feature  
-You can also disable it by doing `disablelocalstack`.  
+You can also disable it by doing `disablelocalstack`.   
 This is cool because it sandboxes the function letting it do its thing and returning only what is needed
 
 ```Python
