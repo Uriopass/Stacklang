@@ -4,11 +4,11 @@
 	n 1 - # n-1 boucles
 	{
 		dup
-		2 getpush
-		+
-		2 exch
-		pop
-	} repeat
+		2 getpush # [3, 4]       -> [3, 4, 4, 3]
+		+ #         [3, 4, 4, 3] -> [3, 4, 3+4]
+		2 exch #    [3, 4, 3+4]  -> [4, 3+4, 3]
+		pop #       [4, 3+4, 3]  -> [4, 3+4]
+	} repeat # on boucle
 } =
 
 2 fib
