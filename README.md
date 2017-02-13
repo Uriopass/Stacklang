@@ -4,7 +4,8 @@ An home-made interpreter written in Python3 for a custom stack-based language he
 ### How to install :
 1. Install python3 if you don't have it already  
 2. Clone the repo  
-3. python3 language.py examples/isprime.txt  
+### How to use :
+python3 main.py examples/isprime.txt  
 
 # Specifications
 

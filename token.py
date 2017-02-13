@@ -1,5 +1,5 @@
-from glob import Global
-from stdlib import functions
+from .glob import Global
+from .stdlib import functions
 import math
 
 class Token:

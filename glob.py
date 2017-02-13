@@ -5,3 +5,12 @@ class Global:
 	refdefstack = []
 	blocks = []
 	localstackenabled = False
+	optionalOutput = ""
+	outputToString = False
+	
+	def reset():
+		variables = ChainMap()
+		stack = []
+		refdefstack = []
+		blocks = []
+		localstackenabled = False

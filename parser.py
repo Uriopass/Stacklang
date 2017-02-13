@@ -1,5 +1,5 @@
-from token import Token
-from block import Block
+from .token import Token
+from .block import Block
 def parseTokens(line):
 	i = 0
 	leng = len(line)

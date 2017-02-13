@@ -1,0 +1,15 @@
+/fib {
+	/n =
+	1 1 # valeurs de base
+	n 1 - # n-1 boucles
+	{
+		dup
+		2 getpush
+		+
+		2 exch
+		pop
+	} repeat
+} =
+
+2 fib
+output

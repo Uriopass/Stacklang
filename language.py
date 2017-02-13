@@ -1,14 +1,8 @@
 #!/usr/local/bin/python3
-import sys
-import token
-import parser
-
-from glob import Global
-
-import stdlib
-
-if len(sys.argv) <= 1:
-	raise RuntimeError("No file given")
+from .glob import Global
+from . import token
+from . import parser
+from . import stdlib
 
 def execute(line):
 	#print("Parsing", line)
@@ -21,16 +15,27 @@ def execute(line):
 	#print("Variables is now", Global.variables)
 	
 
-		
-all = []
-with open(str(sys.argv[1]), "r+") as file:
-	for line in file:
+def parseFile(filename):		
+	all = []
+	with open(str(filename), "r+") as file:
+		for line in file:
+			commentaire = line.find("#")
+			if commentaire == -1:
+				all += line
+			else:
+				all += line[:commentaire]
+	execute(all)
+
+def parseLine(line):
+	all = ""
+	for line in line.split("\n"):
+		line += " "
 		commentaire = line.find("#")
 		if commentaire == -1:
 			all += line
 		else:
 			all += line[:commentaire]
-execute(all)
+	execute(all)
 '''
 def djistraConv():
 		operatorsPrec = {"+":1, "-":1, "*":2, "/":2, "%": 2, "^": 3, "@":4}

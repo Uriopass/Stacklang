@@ -1,0 +1,14 @@
+/fib
+{
+	/in =
+	in 1 -
+	{
+		in 2 - fib in 1 - fib + # Returns fib(n-1) + fib(n-2)
+	}
+	{
+		1
+	}
+	?
+} =
+"fibo de 5 est" output
+5 fib output

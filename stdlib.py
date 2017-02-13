@@ -1,6 +1,7 @@
-from glob import Global
-import token
+from .glob import Global
+from . import token
 import random
+import time
 
 def dup():
 	Global.stack.append(Global.stack[-1])
@@ -43,6 +44,9 @@ def stack():
 	
 def variables():
 	print(Global.variables)
+
+def mytime():
+	Global.stack.append(int(time.time()*1000))
 	
 def pack():
 	n = Global.stack.pop()
@@ -65,7 +69,10 @@ def unpack():
 		raise RuntimeError("Cannot unpack", pack)
 
 def output():
-	print(Global.stack.pop())
+	if Global.outputToString:
+		Global.optionalOutput += str(Global.stack.pop())
+	else:
+		print(Global.stack.pop())
 	
 def exch():
 	ind = Global.stack.pop()
@@ -137,8 +144,11 @@ functions = {"dup":					dup,
 			 "rand":				rand,
 			 "leq":					leq,
 			 "geq":					geq,
+			 "eq":					eq,
 			 "stoi":				stoi,
 			 "while":				mywhile,
 			 "enablelocalstack": 	enablelocalstack,
 			 "disablelocalstack": 	disablelocalstack,
-			 "def":					mydef}
+			 "def":					mydef,
+			 "if":					myif,
+			 "time":				mytime}
