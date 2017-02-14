@@ -154,4 +154,5 @@ functions = {"dup":					dup,
 			 "def":					mydef,
 			 "if":					myif,
 			 "time":				mytime,
-			 "str":					mystr}
+			 "str":					mystr,
+			 "print":				output}

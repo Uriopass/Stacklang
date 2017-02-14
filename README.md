@@ -181,11 +181,11 @@ These operators only manipulate the stack and don't add any additional data
 
 ### Input/Output
 
-| Operator | Name   | i   |  o  | Description                                                 | Example
-| :------: | :-----:| :-: | :-: | :---------------------------------------------------------: | :-----:
-| input    | Input  |  0  |  1  | Asks the user for input and push it                         | `[] => input => ["?"]`
-| output   | Output |  1  |  0  | Outputs the current top of the stack                        | `[1, 2, 3] => output => [1, 2] # Prints "3"`
-| rand     | Random |  1  |  1  | Add a random number to the top of the stack between 1 and n | `[1, 2] => 10 rand => [1, 2, 7 or 3 or ?]`
+| Operator       | Name   | i   |  o  | Description | Example
+| :------------: | :-----:| :-: | :-: | :---------------------------------------------------------: | :-----:
+| input          | Input  |  0  |  1  | Asks the user for input and push it                         | `[] => input => ["?"]`
+| output/print   | Output |  1  |  0  | Outputs the current top of the stack                        | `[1, 2, 3] => output => [1, 2] # Prints "3"`
+| rand           | Random |  1  |  1  | Add a random number to the top of the stack between 1 and n | `[1, 2] => 10 rand => [1, 2, 7 or 3 or ?]`
 
 ### Utils
 
