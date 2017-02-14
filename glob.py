@@ -9,8 +9,8 @@ class Global:
 	outputToString = False
 	
 	def reset():
-		variables = ChainMap()
-		stack = []
-		refdefstack = []
-		blocks = []
-		localstackenabled = False
+		Global.variables = ChainMap()
+		Global.stack = []
+		Global.refdefstack = []
+		Global.blocks = []
+		Global.localstackenabled = False

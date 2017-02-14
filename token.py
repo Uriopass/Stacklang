@@ -81,7 +81,10 @@ def execVarOperator(operator):
 			else:
 				raise RuntimeError("Error assigning value")
 		else:
-			Global.variables[ref] = Token(assign)
+			if isinstance(assign, str):
+				Global.variables[ref] = Token(assign, 'str')
+			else:
+				Global.variables[ref] = Token(assign)
 	if operator == "?":
 		no = Global.stack.pop()
 		yes = Global.stack.pop()
@@ -119,13 +122,12 @@ def executeTokens(tokens):
 			if Global.localstackenabled:
 			
 				if block.argsize > 0:
-					Global.stack = Global.stack[-block.argsize:]
-					beforeStack = Global.stack[:-block.argsize]
+					beforeStack, Global.stack = Global.stack[:-block.argsize], Global.stack[-block.argsize:]
 				else:
 					beforeStack = []
 			
 			executeTokens(block.tokens)
-			
+			#print(beforeStack)
 			if Global.localstackenabled:			
 				afterStack = list(Global.stack)
 			

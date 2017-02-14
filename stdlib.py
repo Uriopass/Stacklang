@@ -34,7 +34,7 @@ def mywhile():
 		raise RuntimeError("Cannot while on something else than blocks")
 		
 def inputAsked():
-	Global.stack.append('"'+input()+'"')
+	Global.stack.append(input())
 
 def getpush():
 	Global.stack.append(Global.stack[-Global.stack.pop()-1])
@@ -77,8 +77,8 @@ def output():
 def exch():
 	ind = Global.stack.pop()
 	value = Global.stack.pop()
-	Global.stack.append(Global.stack[-ind-1])
-	Global.stack[-ind-2] = value
+	Global.stack.append(Global.stack[-ind])
+	Global.stack[-ind-1] = value
 
 def swap():
 	value = Global.stack.pop()
@@ -97,12 +97,12 @@ def mylen():
 def leq():
 	value = Global.stack.pop()
 	value2 = Global.stack.pop()
-	Global.stack.append(1 if value <= value2 else 0)
+	Global.stack.append(1 if value2 <= value else 0)
 	
 def geq():
 	value = Global.stack.pop()
 	value2 = Global.stack.pop()
-	Global.stack.append(1 if value >= value2 else 0)
+	Global.stack.append(1 if value2 >= value else 0)
 	
 def eq():
 	value = Global.stack.pop()
@@ -111,9 +111,11 @@ def eq():
 
 def stoi():
 	value = Global.stack.pop()
-	if value[0] == "'" or value[0] == '"':
-		value = value[1:-1]
 	Global.stack.append(int(value))
+
+def mystr():
+	value = Global.stack.pop()
+	Global.stack.append(str(value))
 
 def mydef():
 	token.execVarOperator("=")
@@ -151,4 +153,5 @@ functions = {"dup":					dup,
 			 "disablelocalstack": 	disablelocalstack,
 			 "def":					mydef,
 			 "if":					myif,
-			 "time":				mytime}
+			 "time":				mytime,
+			 "str":					mystr}

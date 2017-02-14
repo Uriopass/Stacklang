@@ -192,7 +192,8 @@ These operators only manipulate the stack and don't add any additional data
 | Operator | Name              | i   |  o  | Description                                                | Example
 | :------: | :----------------:| :-: | :-: | :--------------------------------------------------------: | :-----:
 | stoi     | String to Integer |  1  |  1  | Convert a string to the integer corresponding if possible  | `[1, 2, "3"] => stoi => [1, 2, 3]`
-| len      | Length            |  1  |  1  | Push the length of top of the stack                        | `[1, 2, "test"] => len => [1, 2, 3]`
+| len      | Length            |  1  |  1  | Push the length of the top of the stack                        
+| `[1, 2, "test"] => len => [1, 2, 4]`
 
 **Note** : `stoi` is often used by doing `/in input stoi def`
 
