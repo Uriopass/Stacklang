@@ -3,7 +3,8 @@ An home-made interpreter written in Python3 for a custom stack-based language he
 
 ### How to install :
 1. Install python3 if you don't have it already  
-2. Clone the repo  
+2. Clone the repo
+
 ### How to use :
 python3 main.py examples/isprime.txt  
 
@@ -218,7 +219,7 @@ Stacklang includes an arguments system for the function by cutting the stack in 
 
 For example `+` takes 2 inputs and 1 output. So we could define `add` as
 ```Python
-/add {2> + >1} # Define add with 2 inputs and one output
+/add {2> + >1} def # Define add with 2 inputs and one output
 ```
 
 Theses are of course optional and you need to do the `enablelocalstack` command to activate this feature  
