@@ -1,7 +1,6 @@
 from .glob import Global
-from .stdlib import functions
-import math
 
+import math
 class Token:
 	blocks = ["{", "}"]
 	math_operators = ["+", "-", "*", "/", "^", "%", "!"]
@@ -99,7 +98,6 @@ def execVarOperator(operator):
 				executeTokens(Global.blocks[yes.value].tokens)
 			else:
 				raise RuntimeError("Cannot if on something else than a block")
-
 def executeTokens(tokens):
 	for tok in tokens:
 		#print(tok)
@@ -141,6 +139,7 @@ def executeTokens(tokens):
 					
 			del Global.variables.maps[0]
 		if tok.type == "ref":
+			from .stdlib import functions
 			if tok.value in Global.variables:
 				executeTokens([Global.variables[tok.value]])
 			elif tok.value in functions:

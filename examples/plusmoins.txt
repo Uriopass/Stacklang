@@ -7,10 +7,10 @@
 	{
 		in nb leq 
 		{
-			"Plus petit" output
+			"Plus grand" output
 		}
 		{
-			"Plus grand" output
+			"Plus petit" output
 		}
 		if
 		test

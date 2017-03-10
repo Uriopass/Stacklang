@@ -1,5 +1,5 @@
 import sys
 sys.path.append('../')
-import Stacklang
+import pystacklang
 if len(sys.argv) >= 2:
-	Stacklang.language.parseFile(sys.argv[1])
+	pystacklang.language.parseFile(sys.argv[1])

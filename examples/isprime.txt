@@ -1,25 +1,37 @@
 disablelocalstack
-/if {?} =
-
 /isprime {
-	/n =
-	n 2 % {/test n 1 + 2 / =}{test n 2 / =} if
-	/i 2 =
-	{i test eq n i % *}
+	/n def
+	
+	/test n
+	
+	n 2 % {1 +} {} if
+	
+	2 / def
+	
+	/i 2 def
 	{
-		/i i 1 + =
+		i test neq
+		n i %
+		* # * is and for booleans
+	} 
+	{
+		/i i 1 + def
 	}
 	while
-	
-	test i -
-} =
-
+	test i eq
+	{
+		0
+	}
+	{
+		i
+	} 
+	if
+} def
 "Enter a number to test" output
-/in input stoi =
+/in input stoi def
 in isprime dup
 {
-	"The number you entered is not prime because divisor" output
-	in swap - output
+	"The number you entered is not prime because divisor " swap str + output
 } 
 { 
 	"The number you entered is prime" output

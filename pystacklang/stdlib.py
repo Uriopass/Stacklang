@@ -1,7 +1,8 @@
 from .glob import Global
-from . import token
+
 import random
 import time
+from .token import *
 
 def dup():
 	Global.stack.append(Global.stack[-1])
@@ -13,22 +14,22 @@ def repeat():
 	block = Global.stack.pop()
 	nb = Global.stack.pop()
 	
-	if isinstance(block, token.Token) and block.type == "blo_ref":
+	if isinstance(block, Token) and block.type == "blo_ref":
 		for x in range(nb):
-			token.executeTokens(Global.blocks[block.value].tokens)
+			executeTokens(Global.blocks[block.value].tokens)
 	else:
 		raise RuntimeError("Cannot if on something else than a block")
 
 def mywhile():
 	block = Global.stack.pop()
 	condition = Global.stack.pop()
-	if isinstance(block, token.Token) and isinstance(condition, token.Token) and block.type == "blo_ref" and condition.type == "blo_ref":
-		token.executeTokens(Global.blocks[condition.value].tokens)
+	if isinstance(block, Token) and isinstance(condition, Token) and block.type == "blo_ref" and condition.type == "blo_ref":
+		executeTokens(Global.blocks[condition.value].tokens)
 		yes = Global.stack.pop() != 0
 		while yes:
-			token.executeTokens(Global.blocks[block.value].tokens)
+			executeTokens(Global.blocks[block.value].tokens)
 			
-			token.executeTokens(Global.blocks[condition.value].tokens)
+			executeTokens(Global.blocks[condition.value].tokens)
 			yes = Global.stack.pop() != 0
 	else:
 		raise RuntimeError("Cannot while on something else than blocks")
@@ -52,11 +53,11 @@ def pack():
 	n = Global.stack.pop()
 	pack = [Global.stack.pop() for x in range(n)]	
 	pack = pack[::-1]
-	Global.stack.append(token.Token(pack, "pack"))
+	Global.stack.append(Token(pack, "pack"))
 
 def unpack():
 	pack = Global.stack.pop()
-	if isinstance(pack, token.Token) and pack.type == "pack":
+	if isinstance(pack, Token) and pack.type == "pack":
 		for x in pack.value:
 			Global.stack.append(x)
 	elif isinstance(pack, str):
@@ -103,7 +104,12 @@ def geq():
 	value = Global.stack.pop()
 	value2 = Global.stack.pop()
 	Global.stack.append(1 if value2 >= value else 0)
-	
+
+def neq():
+	value = Global.stack.pop()
+	value2 = Global.stack.pop()
+	Global.stack.append(1 if value != value2 else 0)
+
 def eq():
 	value = Global.stack.pop()
 	value2 = Global.stack.pop()
@@ -118,10 +124,10 @@ def mystr():
 	Global.stack.append(str(value))
 
 def mydef():
-	token.execVarOperator("=")
+	execVarOperator("=")
 	
 def myif():
-	token.execVarOperator("?")
+	execVarOperator("?")
 
 def enablelocalstack():
 	Global.localstackenabled = True
@@ -155,4 +161,5 @@ functions = {"dup":					dup,
 			 "if":					myif,
 			 "time":				mytime,
 			 "str":					mystr,
-			 "print":				output}
+			 "print":				output,
+			 "neq":					neq}
