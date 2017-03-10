@@ -212,6 +212,7 @@ These operators only manipulate the stack and don't add any additional data
 | leq      | Less than or Equal    |  2  |  1  | Push 1 if a <= b and 0 if b > a  | `[1, 2] => leq => [1]`
 | geq      | Greater than or Equal |  2  |  1  | Push 1 if a >= b and 0 if b < a  | `[1, 2] => geq => [0]`
 | eq       | Equal                 |  2  |  1  | Push 1 if a == b and 0 if a != b | `[1, 2] => eq  => [0]`
+| neq      | Not Equal             |  2  |  1  | Push 0 if a == b and 1 if a != b | `[1, 2] => neq => [1]`
 
 ## Advanced function definition
 
