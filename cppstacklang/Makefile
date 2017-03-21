@@ -3,11 +3,14 @@ CFLAGS = -Wall
 EXEC_NAME = cppstacklang
 INCLUDES = 
 LIBS = 
-OBJ_FILES = Block.o interpreter.o main.o Token.o WorldState.o
+OBJ_FILES = Block.o Interpreter.o main.o Token.o WorldState.o
 INSTALL_DIR = /usr/bin
 BUILD_DIR = ./build
 
-all : $(EXEC_NAME)
+all : makebuilddir $(EXEC_NAME)
+
+makebuilddir : 
+	mkdir -p $(BUILD_DIR)
 
 clean :
 	rm $(EXEC_NAME) $(OBJ_FILES)

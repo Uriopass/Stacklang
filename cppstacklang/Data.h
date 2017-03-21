@@ -3,9 +3,9 @@
 
 typedef union{
 	int i;
-	string s;
+	std::string *s;
 	double d;
-	string ref;
+	std::string *ref;
 } data;
 
 #endif

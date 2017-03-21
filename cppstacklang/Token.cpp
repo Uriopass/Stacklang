@@ -1,3 +1,3 @@
 #include "Token.h"
 
-Token::Token(void* pValue, TokenType type) pValue(pValue), type(type) {}
+Token::Token(token_value value, token_type type) : value(value), type(type) {}

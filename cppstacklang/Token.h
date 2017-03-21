@@ -11,7 +11,7 @@ typedef enum {
 
 typedef union {
 	int i;
-	string s;
+	std::string *s;
 } token_value;
 
 class Token {
