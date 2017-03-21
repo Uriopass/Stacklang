@@ -3,13 +3,22 @@
 
 #include <string>
 
-enum TokenType {INT, VAR_OPE, MAT_OPE};
+typedef enum {
+	INT,
+	VAR_OPE,
+	MAT_OPE
+} token_type;
+
+typedef union {
+	int i;
+	string s;
+} token_value;
 
 class Token {
 	public:
-		Token(string value, TokenType type);
-		string value;
-		TokenType type;
+		Token(token_value value, token_type type);
+		token_value value;
+		token_type type;
 };
 
 #endif
