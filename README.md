@@ -197,9 +197,7 @@ These operators only manipulate the stack and don't add any additional data
 | len      | Length            |  1  |  1  | Push the length of the top of the stack                        
 | `[1, 2, "test"] => len => [1, 2, 4]`
 
-**Note** : `stoi` is often used by doing `/in input stoi def`  
-
-
+**Note** : `stoi` is often used by doing `/in input stoi def`
 ### Debug
 
 | Operator  | Name      |  i  |  o  | Description                           | Example
@@ -215,7 +213,6 @@ These operators only manipulate the stack and don't add any additional data
 | geq      | Greater than or Equal |  2  |  1  | Push 1 if a >= b and 0 if b < a  | `[1, 2] => geq => [0]`
 | eq       | Equal                 |  2  |  1  | Push 1 if a == b and 0 if a != b | `[1, 2] => eq  => [0]`
 | neq      | Not Equal             |  2  |  1  | Push 0 if a == b and 1 if a != b | `[1, 2] => neq => [1]`
-  
 
 
 ## Advanced function definition
