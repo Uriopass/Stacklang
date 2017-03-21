@@ -3,7 +3,9 @@
 	/in =
 	in 1 -
 	{
-		in 2 - fib in 1 - fib + # Returns fib(n-1) + fib(n-2)
+		in 2 - fib 
+		in 1 - fib
+		+ # Returns fib(n-1) + fib(n-2)
 	}
 	{
 		1
