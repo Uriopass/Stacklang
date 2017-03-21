@@ -74,12 +74,12 @@ If the condition is true (i.e different from 0) then the `true` block is execute
 
 ```Python
 /value 3 def
-value 3 - # if value = 3 then value - 3 == 0
+value 3 eq # if value = 3 then value 3 eq = 1
 {
-	"Value is not three" # This is the true block
+	"Value is three" # This is the true block
 }
 {
-	"Value is three" # This is the false block
+	"Value is not three" # This is the false block
 }
 if
 # Stack is now ["Value is three"]
@@ -196,7 +196,7 @@ These operators only manipulate the stack and don't add any additional data
 | len      | Length            |  1  |  1  | Push the length of the top of the stack                        
 | `[1, 2, "test"] => len => [1, 2, 4]`
 
-**Note** : `stoi` is often used by doing `/in input stoi def`
+**Note** : `stoi` is often used by doing `/in input stoi def`  
 
 ### Debug
 
@@ -213,7 +213,7 @@ These operators only manipulate the stack and don't add any additional data
 | geq      | Greater than or Equal |  2  |  1  | Push 1 if a >= b and 0 if b < a  | `[1, 2] => geq => [0]`
 | eq       | Equal                 |  2  |  1  | Push 1 if a == b and 0 if a != b | `[1, 2] => eq  => [0]`
 | neq      | Not Equal             |  2  |  1  | Push 0 if a == b and 1 if a != b | `[1, 2] => neq => [1]`
-
+  
 ## Advanced function definition
 
 Stacklang includes an arguments system for the function by cutting the stack in a specific way and returning a specific number of elements to the parent stack.
