@@ -124,6 +124,7 @@ while
 # Stack is now [2, 1, 0]
 ```
 
+
 ## Recursion
 
 Stacklang supports recursion
@@ -198,6 +199,7 @@ These operators only manipulate the stack and don't add any additional data
 
 **Note** : `stoi` is often used by doing `/in input stoi def`  
 
+
 ### Debug
 
 | Operator  | Name      |  i  |  o  | Description                           | Example
@@ -214,6 +216,8 @@ These operators only manipulate the stack and don't add any additional data
 | eq       | Equal                 |  2  |  1  | Push 1 if a == b and 0 if a != b | `[1, 2] => eq  => [0]`
 | neq      | Not Equal             |  2  |  1  | Push 0 if a == b and 1 if a != b | `[1, 2] => neq => [1]`
   
+
+
 ## Advanced function definition
 
 Stacklang includes an arguments system for the function by cutting the stack in a specific way and returning a specific number of elements to the parent stack.
