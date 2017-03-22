@@ -5,7 +5,9 @@
 
 class Interpreter {
 	public:
-		Interpreter();
+		Interpreter(WorldState ws);
+		void execute();
+		
 		WorldState _ws;
 };
 

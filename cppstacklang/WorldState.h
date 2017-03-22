@@ -8,7 +8,7 @@
 class WorldState {
 	public:
 		WorldState();
-		std::vector<Block> blocks;
+		std::vector<Block> blocks; // blocks[0] is the main
 		std::stack<data> stack;
 };
 

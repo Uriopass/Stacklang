@@ -4,9 +4,9 @@
 #include <string>
 
 typedef enum {
-	INT,
-	VAR_OPE,
-	MAT_OPE
+	TOK_INT,
+	TOK_VAR_OPE,
+	TOK_MAT_OPE
 } token_type;
 
 typedef union {
