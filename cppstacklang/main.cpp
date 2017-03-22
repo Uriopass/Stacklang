@@ -20,7 +20,7 @@ int main(int argc, char** argv) {
 	WorldState ws;
 	try {
 		ws = p.parse();
-	} catch ( char const* Msg ) { 
+	} catch( char const* Msg ) { 
 		std::cerr << "Error : " << Msg << std::endl; 
 		return 1;
 	} catch( std::string s) {
@@ -28,18 +28,17 @@ int main(int argc, char** argv) {
 		return 1;
 	}
 	
-	Block test = Block(0);
+	Block root = Block(0);
 	
-	test.tokens.push_back(Token(3, TOK_INT));
-	test.tokens.push_back(Token(2, TOK_INT));
-	test.tokens.push_back(Token(PLUS, TOK_MAT_OPE));
+	root.tokens.push_back(Token((var_t){0}, TOK_REF_DEF));
+	root.tokens.push_back(Token(3, TOK_INT));
+	root.tokens.push_back(Token(DEF, TOK_VAR_OPE));
+	root.tokens.push_back(Token((var_t){0}, TOK_REF));
+	root.tokens.push_back(Token((var_t){0}, TOK_REF));
+	root.tokens.push_back(Token(PLUS, TOK_MAT_OPE));
 	
-	test.tokens.push_back(Token(3, TOK_INT));
-	test.tokens.push_back(Token(2, TOK_INT));
-	test.tokens.push_back(Token(PLUS, TOK_MAT_OPE));
-	test.tokens.push_back(Token(PLUS, TOK_MAT_OPE));
-	
-	ws.blocks.push_back(test);
+	ws.blocks.push_back(root);
+	ws.variables = Variables(1);
 	
 	Interpreter a = Interpreter(ws);
 	
