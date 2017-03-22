@@ -3,13 +3,15 @@
 
 #include "Block.h"
 #include "Data.h"
-#include <stack>
+#include <deque>
 
 class WorldState {
 	public:
 		WorldState();
+		void printStack();
+		
 		std::vector<Block> blocks; // blocks[0] is the main
-		std::stack<data> stack;
+		std::deque<data> stack;
 };
 
 #endif

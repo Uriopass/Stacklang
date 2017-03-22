@@ -2,7 +2,7 @@
 # The name of the executable to be created
 BIN_NAME := cppstacklang
 # Compiler used
-CXX ?= g++
+CXX ?= llvm-g++
 # Extension of source files used in the project
 SRC_EXT = cpp
 # Path to the source directory, relative to the makefile
@@ -16,7 +16,7 @@ RCOMPILE_FLAGS = -D NDEBUG
 # Additional debug-specific flags
 DCOMPILE_FLAGS = -D DEBUG
 # Add additional include paths
-INCLUDES = -I $(SRC_PATH)
+INCLUDES = -I $(SRC_PATH) -I/usr/local/Cellar/boost/1.63.0/include
 # General linker settings
 LINK_FLAGS =
 # Additional release-specific linker settings

@@ -17,30 +17,44 @@ int main(int argc, char** argv) {
 	Parser p = Parser();
 	
 	p.feed("3 2 +");
-	WorldState ws = p.parse();
+	WorldState ws;
+	try {
+		ws = p.parse();
+	} catch ( char const* Msg ) { 
+		std::cerr << "Error : " << Msg << std::endl; 
+		return 1;
+	} catch( std::string s) {
+		std::cerr << "Error : " << s << std::endl; 
+		return 1;
+	}
 	
 	Block test = Block(0);
 	
-	token_value v;
-	v.i = 3;
-	test.tokens.push_back(Token(v, TOK_INT));
-	token_value v2;
-	v2.i = 2;
-	test.tokens.push_back(Token(v2, TOK_INT));
-	token_value v3;
-	std::string r = std::string("+");
-	v3.s = &r;
-	test.tokens.push_back(Token(v3, TOK_MAT_OPE));
+	test.tokens.push_back(Token(3, TOK_INT));
+	test.tokens.push_back(Token(2, TOK_INT));
+	test.tokens.push_back(Token(PLUS, TOK_MAT_OPE));
+	
+	test.tokens.push_back(Token(3, TOK_INT));
+	test.tokens.push_back(Token(2, TOK_INT));
+	test.tokens.push_back(Token(PLUS, TOK_MAT_OPE));
+	test.tokens.push_back(Token(PLUS, TOK_MAT_OPE));
 	
 	ws.blocks.push_back(test);
 	
 	Interpreter a = Interpreter(ws);
+	
 	try {
 		a.execute();
-	}
-	catch ( char const* Msg ) 
-	{ 
+	} catch ( char const* Msg ) { 
 		std::cerr << "Error : " << Msg << std::endl; 
+		return 1;
+	} catch( std::string s) {
+		std::cerr << "Error : " << s << std::endl; 
+		return 1;
 	}
+	
+	cout << "Stack is now ";
+	a._ws.printStack();
+	
 	return 0;
 }
