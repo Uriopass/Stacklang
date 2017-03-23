@@ -5,16 +5,17 @@
 
 class Interpreter {
 	public:
-		Interpreter(WorldState ws);
+		Interpreter(WorldState *ws);
+		~Interpreter();
 		void execute();
-		void executeBlock(Block b);
+		void executeBlock(int id);
 		void executeToken(Token t);
 		void executeMatOperator(mat_ope_t ope);
 		void executeVarOperator(var_ope_t ope);
 		void executeReference(var_t ref);
 		data pop_stack();
 		
-		WorldState _ws;
+		WorldState* ws;
 };
 
 #endif

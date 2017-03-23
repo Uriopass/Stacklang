@@ -10,7 +10,7 @@ class Parser {
 		void feed(std::string code);
 		
 		std::string code;
-		WorldState parse();
+		WorldState* parse();
 };
 
 #endif

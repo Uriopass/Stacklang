@@ -10,9 +10,10 @@
 class WorldState {
 	public:
 		WorldState();
+		~WorldState();
 		void printStack();
 		
-		std::vector<Block> blocks; // blocks[0] is the main
+		std::vector<Block*> blocks; // blocks[0] is the main
 		std::deque<data> stack;
 		Variables variables;
 };

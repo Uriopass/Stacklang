@@ -5,6 +5,12 @@ Variables::Variables() {
 	
 }
 
+Variables::~Variables() {
+	free(scopes);
+	for(int i = 0 ; i < total_variables ; i++)
+		delete variables[i];
+}
+
 Variables::Variables(int total_variables) {
 	this->total_variables = total_variables;
 	variables = (std::vector<data>**) malloc(total_variables*sizeof(std::vector<data>*));

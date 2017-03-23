@@ -14,12 +14,13 @@ int main(int argc, char** argv) {
 		cout << "\t" << argv[i] << endl;
 	}
 	
-	Parser p = Parser();
+	Parser* p = new Parser();
 	
-	p.feed("3 2 +");
-	WorldState ws;
+	p->feed("3 2 +");
+	WorldState* ws;
 	try {
-		ws = p.parse();
+		ws = p->parse();
+		delete p;
 	} catch( char const* Msg ) { 
 		std::cerr << "Error : " << Msg << std::endl; 
 		return 1;
@@ -28,22 +29,26 @@ int main(int argc, char** argv) {
 		return 1;
 	}
 	
-	Block root = Block(0);
+	Block* root = new Block(0);
+	Block* func = new Block(1);
+	func->tokens.push_back(Token(3, TOK_INT));
 	
-	root.tokens.push_back(Token((var_t){0}, TOK_REF_DEF));
-	root.tokens.push_back(Token(3, TOK_INT));
-	root.tokens.push_back(Token(DEF, TOK_VAR_OPE));
-	root.tokens.push_back(Token((var_t){0}, TOK_REF));
-	root.tokens.push_back(Token((var_t){0}, TOK_REF));
-	root.tokens.push_back(Token(PLUS, TOK_MAT_OPE));
+	root->tokens.push_back(Token((var_t){0}, TOK_REF_DEF));
+	root->tokens.push_back(Token((blo_ref_t){1}, TOK_BLO_REF));
+	root->tokens.push_back(Token(DEF, TOK_VAR_OPE));
 	
-	ws.blocks.push_back(root);
-	ws.variables = Variables(1);
+	root->tokens.push_back(Token((var_t){0}, TOK_REF));
+	root->tokens.push_back(Token((var_t){0}, TOK_REF));
+	root->tokens.push_back(Token(ADD, TOK_MAT_OPE));
 	
-	Interpreter a = Interpreter(ws);
+	ws->blocks.push_back(root);
+	ws->blocks.push_back(func);
+	ws->variables = Variables(1);
+	
+	Interpreter* a = new Interpreter(ws);
 	
 	try {
-		a.execute();
+		a->execute();
 	} catch ( char const* Msg ) { 
 		std::cerr << "Error : " << Msg << std::endl; 
 		return 1;
@@ -53,7 +58,8 @@ int main(int argc, char** argv) {
 	}
 	
 	cout << "Stack is now ";
-	a._ws.printStack();
+	a->ws->printStack();
+	delete a;
 	
 	return 0;
 }

@@ -8,6 +8,7 @@ class Variables {
 	public:
 		Variables();
 		Variables(int total_variables);
+		~Variables();
 	
 		std::vector<data> **variables;
 		std::vector<int> *scopes;

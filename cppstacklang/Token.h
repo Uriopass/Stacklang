@@ -10,12 +10,13 @@ typedef enum {
 	TOK_VAR_OPE,
 	TOK_MAT_OPE,
 	TOK_REF,
-	TOK_REF_DEF
+	TOK_REF_DEF,
+	TOK_BLO_REF
 } token_t;
 
 typedef enum {
-	PLUS,
-	MINUS,
+	ADD,
+	SUB,
 	MOD
 } mat_ope_t;
 
