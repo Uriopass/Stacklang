@@ -10,4 +10,4 @@
 	?
 } =
 
-6 fact # Puts 120 on the stack
+50 fact print # Puts 120 on the stack
