@@ -16,7 +16,7 @@ RCOMPILE_FLAGS = -D NDEBUG
 # Additional debug-specific flags
 DCOMPILE_FLAGS = -D DEBUG
 # Add additional include paths
-INCLUDES = -I $(SRC_PATH) -I/usr/local/Cellar/boost/1.63.0/include
+INCLUDES = -I $(SRC_PATH) -I/usr/lib/sagemath/local/include -I/usr/local/Cellar/boost/1.63.0/include
 # General linker settings
 LINK_FLAGS =
 # Additional release-specific linker settings
