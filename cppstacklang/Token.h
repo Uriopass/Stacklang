@@ -21,7 +21,8 @@ typedef enum {
 } mat_ope_t;
 
 typedef enum {
-	DEF
+	DEF,
+	IF
 } var_ope_t;
 
 #define TOKEN_VALUE_V_INT 0
