@@ -43,7 +43,7 @@ int main(int argc, char** argv) {
 	
 	ws->blocks.push_back(root);
 	ws->blocks.push_back(func);
-	ws->variables = Variables(1);
+	ws->variables = new Variables(1);
 	
 	Interpreter* a = new Interpreter(ws);
 	

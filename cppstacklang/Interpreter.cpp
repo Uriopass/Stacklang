@@ -1,6 +1,7 @@
 #include "Interpreter.h"
 #include <iostream>
 #include <boost/variant.hpp>
+#include "Printer.h"
 
 Interpreter::Interpreter(WorldState* ws) {
 	this->ws = ws;
@@ -44,15 +45,15 @@ void Interpreter::executeMatOperator(mat_ope_t ope) {
 }
 
 void Interpreter::executeReference(var_t ref) {
-	data d = ws->variables.access(ref.val);
+	data d = ws->variables->access(ref.val);
 	std::cout << "Executing reference : " << d.which() << std::endl;
 
 	if(d.which() == DATA_V_BLO_REF) {
 		std::cout << "Reference is block_ref id: " << boost::get<blo_ref_t>(d).ref << " scoping up" << std::endl;
-		ws->variables.scope_up();
+		ws->variables->scope_up();
 		executeBlock(boost::get<blo_ref_t>(d).ref);
 		std::cout << "Scoping down" << std::endl;
-		ws->variables.scope_down();
+		ws->variables->scope_down();
 	} else {
 		ws->stack.push_back(d);
 	}
@@ -64,7 +65,7 @@ void Interpreter::executeVarOperator(var_ope_t ope) {
 		{
 			data stor = pop_stack();
 			var_t v = boost::get<var_t>(pop_stack());
-			ws->variables.store(v.val, stor);
+			ws->variables->store(v.val, stor);
 		}
 		break;
 		default:
@@ -110,7 +111,7 @@ void Interpreter::executeBlock(int id) {
 	for(unsigned int i = 0 ; i < b.tokens.size() ; i++)
 	{
 		std::cout << "\t tok type : ";
-		std::cout << b.tokens[i].type << std::endl;
+		std::cout << Printer::out(b.tokens[i].type) << std::endl;
 		executeToken(b.tokens[i]);
 		std::cout << "Stack after token execution is : ";
 		ws->printStack();

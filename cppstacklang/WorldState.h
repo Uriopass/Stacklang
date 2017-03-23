@@ -15,7 +15,7 @@ class WorldState {
 		
 		std::vector<Block*> blocks; // blocks[0] is the main
 		std::deque<data> stack;
-		Variables variables;
+		Variables* variables;
 };
 
 #endif

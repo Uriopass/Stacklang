@@ -10,8 +10,8 @@ class Variables {
 		Variables(int total_variables);
 		~Variables();
 	
-		std::vector<data> **variables;
-		std::vector<int> *scopes;
+		std::vector<data>** variables;
+		std::vector<int>** scopes;
 	
 		int total_variables;
 	
