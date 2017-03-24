@@ -28,22 +28,10 @@ int main(int argc, char** argv) {
 		std::cerr << "Error : " << s << std::endl; 
 		return 1;
 	}
-	
-	Block* root = new Block(0);
-	Block* func = new Block(1);
-	func->tokens.push_back(Token(3, TOK_INT));
-	
-	root->tokens.push_back(Token((var_t){0}, TOK_REF_DEF));
-	root->tokens.push_back(Token((blo_ref_t){1}, TOK_BLO_REF));
-	root->tokens.push_back(Token(DEF, TOK_VAR_OPE));
-	
-	root->tokens.push_back(Token((var_t){0}, TOK_REF));
-	root->tokens.push_back(Token((var_t){0}, TOK_REF));
-	root->tokens.push_back(Token(ADD, TOK_MAT_OPE));
-	
-	ws->blocks.push_back(root);
-	ws->blocks.push_back(func);
-	ws->variables = new Variables(1);
+	/*
+	/a {/b = b 1 - {b b 1 - a} {} ?}
+	a
+	*/
 	
 	Interpreter* a = new Interpreter(ws);
 	

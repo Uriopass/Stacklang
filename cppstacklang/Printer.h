@@ -8,7 +8,7 @@
 
 class Printer {
 	public:
-	static const char* out(token_t t) {
+	static const char* out(const token_t t) {
 		switch(t) {
 			case TOK_INT:
 				return "int";
@@ -34,7 +34,33 @@ class Printer {
 		return "";
 	}
 	
-	static std::string out(data t) {
+	static std::string out(const Token& t) {
+		std::ostringstream ostr;
+		ostr << "(";
+		int which = t.value.which();
+		if(which == TOKEN_VALUE_V_INT) {
+			ostr << boost::get<int>(t.value);
+		}
+		if(which == TOKEN_VALUE_V_STRING) {
+			ostr << boost::get<std::string>(t.value);
+		}
+		if(which == TOKEN_VALUE_V_VAR_OPE) {
+			ostr << boost::get<var_ope_t>(t.value);
+		}
+		if(which == TOKEN_VALUE_V_MAT_OPE) {
+			ostr << boost::get<mat_ope_t>(t.value);
+		}
+		if(which == TOKEN_VALUE_V_VAR) {
+			ostr << boost::get<var_t>(t.value).val;
+		}
+		if(which == TOKEN_VALUE_V_BLO_REF) {
+			ostr << boost::get<blo_ref_t>(t.value).ref;
+		}
+		ostr << ", " << out(t.type) << ")";
+		return ostr.str();
+	}
+	
+	static std::string out(const data& t) {
 		int which = t.which();
 		if(which == DATA_V_BLO_REF) {
 			std::ostringstream ostr;

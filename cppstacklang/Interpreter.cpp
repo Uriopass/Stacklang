@@ -68,6 +68,19 @@ void Interpreter::executeVarOperator(var_ope_t ope) {
 			ws->variables->store(v.val, stor);
 		}
 		break;
+		case IF:
+		{
+			blo_ref_t false_b = boost::get<blo_ref_t>(pop_stack());
+			blo_ref_t true_b = boost::get<blo_ref_t>(pop_stack());
+			int condition = boost::get<int>(pop_stack());
+			if(condition) {
+				executeBlock(true_b.ref);
+			} else {
+				executeBlock(false_b.ref);
+			}
+		}
+		break;
+		
 		default:
 			break;
 	}

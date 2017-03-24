@@ -7,7 +7,8 @@
 class Parser {
 	public:
 		Parser();
-		void feed(std::string code);
+		void feed(const std::string& code);
+		int Parser::concatBlock(WorldState* ws, std::vector<Token>& tokens, int start);
 		
 		std::string code;
 		WorldState* parse();

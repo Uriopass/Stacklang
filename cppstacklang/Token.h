@@ -11,7 +11,10 @@ typedef enum {
 	TOK_MAT_OPE,
 	TOK_REF,
 	TOK_REF_DEF,
-	TOK_BLO_REF
+	TOK_BLO_REF,
+	TOK_BLO_DEL,
+	TOK_STRING,
+	TOK_UKN
 } token_t;
 
 typedef enum {

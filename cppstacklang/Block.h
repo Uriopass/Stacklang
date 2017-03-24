@@ -9,6 +9,7 @@ class Block {
 		Block(int id);
 		int id;
 		std::vector<Token> tokens;
+		void add_token(Token t);
 };
 
 #endif
