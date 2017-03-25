@@ -16,7 +16,8 @@ int main(int argc, char** argv) {
 	
 	Parser* p = new Parser();
 	
-	p->feed("3 2 +");
+	p->feed("/i 0 = /abc {/i i 1 + = i @ abc } = abc ");
+	
 	WorldState* ws;
 	try {
 		ws = p->parse();
@@ -29,8 +30,7 @@ int main(int argc, char** argv) {
 		return 1;
 	}
 	/*
-	/a {/b = b 1 - {b b 1 - a} {} ?}
-	a
+	
 	*/
 	
 	Interpreter* a = new Interpreter(ws);

@@ -19,7 +19,7 @@ int WorldState::getVarAddress(const std::string& base) {
 	std::unordered_map<std::string, int>::const_iterator got = var_names.find(base);
 	if(got == var_names.end()) {
 		int count = var_names.size();
-		var_names.insert(std::make_pair<std::string,int>(base, count));
+		var_names.insert(std::make_pair(base, count));
 		return count;
 	} else {
 		return got->second;	

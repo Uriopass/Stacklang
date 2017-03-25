@@ -112,6 +112,15 @@ void Interpreter::executeToken(Token t) {
 			ws->stack.push_back(boost::get<var_t>(t.value));
 		break;
 		
+		case TOK_UKN:
+		{
+			std::string val = boost::get<std::string>(t.value);
+			if(val == "@") {
+				std::cout << Printer::out(pop_stack()) << std::endl;
+			}
+		}
+		break;
+		
 		default:
 			break;
 	}

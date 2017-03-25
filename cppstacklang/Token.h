@@ -33,7 +33,7 @@ typedef enum {
 #define TOKEN_VALUE_V_VAR_OPE 2
 #define TOKEN_VALUE_V_MAT_OPE 3
 #define TOKEN_VALUE_V_VAR 4
-#define TOKEN_VALUE_V_BLO_REF 4
+#define TOKEN_VALUE_V_BLO_REF 5
 
 typedef boost::variant<int, std::string, var_ope_t, mat_ope_t, var_t, blo_ref_t> token_value;
 

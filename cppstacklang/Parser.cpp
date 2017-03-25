@@ -3,6 +3,7 @@
 #include <cctype>
 #include <string>
 #include <unordered_set>
+#include <utility>
 #include "Token.h"
 #include "Printer.h"
 /*
@@ -86,68 +87,86 @@ var_ope_t parse_var_ope(char c) {
 	}
 }
 
-int Parser::concatBlock(WorldState* ws, std::vector<Token>& tokens, int start) {
-	Block* b = new Block(ws->blocks.size());
+std::pair<int, int> Parser::concatBlock(WorldState* ws, std::vector<Token>& tokens, int start) {
+	int bId = ws->blocks.size();
+	Block* b = new Block(bId);
+	ws->blocks.push_back(b);
 	
 	for(int i = start ; i < tokens.size() ; i++) {
 		Token t = tokens[i];
-		if(t.type() == TOK_BLO_DEL) {
-			if(t.value == "}") {
-				return i;
+		if(t.type == TOK_BLO_DEL) {
+			std::string tokval = boost::get<std::string>(t.value);
+		
+			if(tokval == "}") {
+			
+				return std::make_pair(i, bId);
+			}
+			if(tokval == "{") {
+				std::pair<int, int> r = concatBlock(ws, tokens, i+1);
+				i = r.first;
+				blo_ref_t val;
+				val.ref = r.second;
+				Token t2(val, TOK_BLO_REF);
+				b->add_token(t2);
 			}
 		} else {
-		
-		}
-		
+			b->add_token(t);
+		}		
 	}
+	throw "Error parsing blocks";
 }
 
 
 WorldState* Parser::parse() {
+
 	WorldState* ws = new WorldState();
 	
-	std::string::iterator it;
-	
 	std::vector<Token> tokens;
+	int end = code.size();
 	
-	for(it = code.begin() ; it != code.end(); it++) {
-		char c = *it;
-		
+	for(int it = 0 ; it < end; it++) {
+		char c = code[it];
+		std::cout << "Char is " << code[it] << std::endl;
 		if(isdigit(c)) {
 			std::string base("");
-			while(isdigit(*it) and it != code.end()) {
-				base += *it;
+			while(isdigit(code[it]) and it !=end) {
+				base += code[it];
 				it++;
 			}
 			Token t(std::stoi(base), TOK_INT);
 			tokens.push_back(t);
 		} else if(is_string_delimiter(c)) {
 			std::string base("");
-			while(is_string_delimiter(*it) and it != code.end()) {
-				base += *it;
+			while(is_string_delimiter(code[it]) and it !=end) {
+				base += code[it];
 				it++;
 			}
 			Token t(base, TOK_STRING);
 			tokens.push_back(t);
 		} else if(isalpha(c) or c == '_') {
 			std::string base("");
-			while((isalnum(c) or c == '_') and it != code.end()) {
-				base += c;
+			while((isalnum(code[it]) or code[it] == '_') and it !=end) {
+				std::cout << code[it] << std::endl;
+				base += code[it];
 				it++;
 			}
 			
+			std::cout << "Parsed ref " << base << std::endl;
 			var_t var;
 			var.val = ws->getVarAddress(base);
 			
 			Token t(var, TOK_REF);
 			tokens.push_back(t);
-		} else if(c == '/' and (it+1) != code.end() and isalpha(*(it+1))) {
+		} else if(c == '/' and (it+1) != end and isalpha(code[it+1])) {
 			it += 1;
 			std::string base("");
-			while((isalnum(c) or c == '_') and it != code.end()) {
-				base += *it;
+			while((isalnum(code[it]) or code[it] == '_') and it != end) {
+				std::cout << code[it] << std::endl;
+				base += code[it];
 				it++;
 			}
+			std::cout << "Parsed ref def " << base << std::endl;
+			
 			var_t var;
 			var.val = ws->getVarAddress(base);
 			
@@ -157,7 +176,7 @@ WorldState* Parser::parse() {
 			
 		} else if(is_block_delimiter(c)) {
 			std::string base("");
-			base += *it;
+			base += code[it];
 			Token t(base, TOK_BLO_DEL);
 			tokens.push_back(t);
 		} else if(is_mat_ope(c)) {
@@ -175,7 +194,6 @@ WorldState* Parser::parse() {
 		}
 	}
 	
-	code.clear(); // We don't need code anymore
 	std::cout << "Raw token parsing (no block concat) gives : " << std::endl;
 	for(int i = 0 ; i < tokens.size() ; i++) {
 		Token t = tokens[i];
@@ -183,11 +201,29 @@ WorldState* Parser::parse() {
 	}
 	
 	Token endDel("}", TOK_BLO_DEL); // Emulate "main" block
-	tokens.push_bacl(t);
+	tokens.push_back(endDel);
 	
-	concatBlock(ws, tokens, 0, 0);
+	std::pair<int, int> r = concatBlock(ws, tokens, 0);
+	
+	if(r.first != tokens.size()) {
+		std::cout << "Parsing is weird.." << r.first << " vs " << tokens.size() << std::endl;
+	}
+	if(r.second != 0) {
+		std::cout << "Parsing is weird.." << r.second << std::endl;
+	}
+	
+	std::cout << "Total var are : " << ws->var_names.size() << std::endl;
+	for(auto i : ws->var_names) {
+		std::cout << "\t" << i.first << " " << i.second << std::endl;
+	}
+	
+	for(int i = 0 ; i < ws->blocks.size() ; i++) {
+		std::cout << "Block id " << i << " contains " << std::endl;
+		ws->blocks[i]->print_content();
+	}
 	
 	ws->variables = new Variables(ws->var_names.size());
 	
+	code.clear(); // We don't need code anymore
 	return ws;
 }

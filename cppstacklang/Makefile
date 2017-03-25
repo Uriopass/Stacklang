@@ -2,7 +2,7 @@
 # The name of the executable to be created
 BIN_NAME := cppstacklang
 # Compiler used
-CXX ?= llvm-g++
+CXX ?= g++-6
 # Extension of source files used in the project
 SRC_EXT = cpp
 # Path to the source directory, relative to the makefile
@@ -10,7 +10,7 @@ SRC_PATH = .
 # Space-separated pkg-config libraries used by this project
 LIBS =
 # General compiler flags
-COMPILE_FLAGS = -g -Wall
+COMPILE_FLAGS = -g -Wall -std=c++11
 # Additional release-specific flags
 RCOMPILE_FLAGS = -D NDEBUG
 # Additional debug-specific flags
