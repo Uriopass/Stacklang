@@ -7,16 +7,19 @@
 
 using namespace std;
 
-int main(int argc, char** argv) {
-	cout << "Arguments are : (" << argc << ")" << endl;
 
+int main(int argc, char** argv) {
+	#ifdef DEBUG
+	cout << "Arguments are : (" << argc << ")" << endl;
+	
 	for(int i = 0 ; i < argc ; i++) {
 		cout << "\t" << argv[i] << endl;
 	}
+	#endif
 	
 	Parser* p = new Parser();
 	
-	p->feed("/i 0 = /abc {/i i 1 + = i @ abc } = abc ");
+	p->feed("5 {1 @} repeat");
 	
 	WorldState* ws;
 	try {

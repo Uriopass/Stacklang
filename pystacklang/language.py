@@ -3,6 +3,8 @@ from .glob import Global
 from . import token
 from . import parser
 from . import stdlib
+import sys
+sys.setrecursionlimit(100000)
 
 def execute(line):
 	#print("Parsing", line)

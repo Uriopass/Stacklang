@@ -11,9 +11,9 @@ Interpreter::~Interpreter() {
 	delete ws;
 }
 
-data Interpreter::pop_stack() {
-	data d = ws->stack.back();
-	ws->stack.pop_back();
+data* Interpreter::pop_stack() {
+	data* d = ws->stack->back();
+	ws->stack->pop_back();
 	return d;
 }
 
@@ -21,23 +21,35 @@ void Interpreter::executeMatOperator(mat_ope_t ope) {
 	switch(ope) {
 		case ADD:
 		{
-			int a = boost::get<int>(pop_stack());
-			int b = boost::get<int>(pop_stack());
-			ws->stack.push_back(b+a);
+			data* d = pop_stack();
+			data* d2 = pop_stack();
+			int a = boost::get<int>(*d);
+			int b = boost::get<int>(*d2);
+			delete d;
+			delete d2;
+			ws->stack->push_back(new data(b+a));
 		}
 		break;
 		case SUB:
 		{
-			int a = boost::get<int>(pop_stack());
-			int b = boost::get<int>(pop_stack());
-			ws->stack.push_back(b-a);
+			data* d = pop_stack();
+			data* d2 = pop_stack();
+			int a = boost::get<int>(*d);
+			int b = boost::get<int>(*d2);
+			delete d;
+			delete d2;
+			ws->stack->push_back(new data(b-a));
 		}
 		break;
 		case MOD:
 		{
-			int a = boost::get<int>(pop_stack());
-			int b = boost::get<int>(pop_stack());
-			ws->stack.push_back(b%a);
+			data* d = pop_stack();
+			data* d2 = pop_stack();
+			int a = boost::get<int>(*d);
+			int b = boost::get<int>(*d2);
+			delete d;
+			delete d2;
+			ws->stack->push_back(new data(b%a));
 		}
 		default:
 		break;
@@ -46,16 +58,26 @@ void Interpreter::executeMatOperator(mat_ope_t ope) {
 
 void Interpreter::executeReference(var_t ref) {
 	data d = ws->variables->access(ref.val);
+	#ifdef DEBUG
 	std::cout << "Executing reference : " << d.which() << std::endl;
-
+	#endif
 	if(d.which() == DATA_V_BLO_REF) {
-		std::cout << "Reference is block_ref id: " << boost::get<blo_ref_t>(d).ref << " scoping up" << std::endl;
+		int bid = boost::get<blo_ref_t>(d).ref;
+		#ifdef DEBUG
+		std::cout << "Reference is block_ref id: " << bid << " scoping up" << std::endl;
+		#endif
+		
 		ws->variables->scope_up();
-		executeBlock(boost::get<blo_ref_t>(d).ref);
+		executeBlock(bid);
+		
+		#ifdef DEBUG
 		std::cout << "Scoping down" << std::endl;
+		#endif
 		ws->variables->scope_down();
+	} else if(d.which() == DATA_V_FUNC) {
+		boost::get<func_t>(d)(this);
 	} else {
-		ws->stack.push_back(d);
+		ws->stack->push_back(new data(d));
 	}
 }
 
@@ -63,21 +85,29 @@ void Interpreter::executeVarOperator(var_ope_t ope) {
 	switch(ope) {
 		case DEF:
 		{
-			data stor = pop_stack();
-			var_t v = boost::get<var_t>(pop_stack());
-			ws->variables->store(v.val, stor);
+			data* stor = pop_stack();
+			data* d = pop_stack();
+			var_t v = boost::get<var_t>(*d);
+			ws->variables->store(v.val, *stor);
+			delete d;
 		}
 		break;
 		case IF:
 		{
-			blo_ref_t false_b = boost::get<blo_ref_t>(pop_stack());
-			blo_ref_t true_b = boost::get<blo_ref_t>(pop_stack());
-			int condition = boost::get<int>(pop_stack());
+			data* d = pop_stack();
+			data* d2 = pop_stack();
+			data* d3 = pop_stack();
+			blo_ref_t false_b = boost::get<blo_ref_t>(*d);
+			blo_ref_t true_b = boost::get<blo_ref_t>(*d2);
+			int condition = boost::get<int>(*d3);
 			if(condition) {
 				executeBlock(true_b.ref);
 			} else {
 				executeBlock(false_b.ref);
 			}
+			delete d;
+			delete d2;
+			delete d3;
 		}
 		break;
 		
@@ -89,7 +119,7 @@ void Interpreter::executeVarOperator(var_ope_t ope) {
 void Interpreter::executeToken(Token t) {
 	switch(t.type) {
 		case TOK_INT:
-			ws->stack.push_back(boost::get<int>(t.value));
+			ws->stack->push_back(new data(boost::get<int>(t.value)));
 		break;
 			
 		case TOK_MAT_OPE:
@@ -97,7 +127,7 @@ void Interpreter::executeToken(Token t) {
 		break;
 		
 		case TOK_BLO_REF:
-			ws->stack.push_back(boost::get<blo_ref_t>(t.value));
+			ws->stack->push_back(new data(boost::get<blo_ref_t>(t.value)));
 		break;
 			
 		case TOK_REF:
@@ -109,15 +139,17 @@ void Interpreter::executeToken(Token t) {
 		break;
 			
 		case TOK_REF_DEF:
-			ws->stack.push_back(boost::get<var_t>(t.value));
+			ws->stack->push_back(new data(boost::get<var_t>(t.value)));
 		break;
 		
 		case TOK_UKN:
 		{
 			std::string val = boost::get<std::string>(t.value);
+			data* d = pop_stack();
 			if(val == "@") {
-				std::cout << Printer::out(pop_stack()) << std::endl;
+				std::cout << Printer::out(*d) << std::endl;
 			}
+			delete d;
 		}
 		break;
 		
@@ -128,17 +160,26 @@ void Interpreter::executeToken(Token t) {
 
 void Interpreter::executeBlock(int id) {
 	Block &b = (*ws->blocks[id]);
+	#ifdef DEBUG
 	std::cout << "Executing block " << id << " size: " << b.tokens.size() << std::endl;
-	
+	#endif
 	for(unsigned int i = 0 ; i < b.tokens.size() ; i++)
 	{
+		#ifdef DEBUG
 		std::cout << "\t tok type : ";
 		std::cout << Printer::out(b.tokens[i].type) << std::endl;
+		#endif
+		
 		executeToken(b.tokens[i]);
+		
+		#ifdef DEBUG
 		std::cout << "Stack after token execution is : ";
 		ws->printStack();
+		#endif
 	}
+	#ifdef DEBUG
 	std::cout << "Getting out of block " << id << std::endl;
+	#endif
 	return;
 }
 

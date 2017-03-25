@@ -3,18 +3,21 @@
 
 #include "Data.h"
 #include <vector>
+#include <unordered_map>
 
 class Variables {
 	public:
-		Variables();
-		Variables(int total_variables);
-		~Variables();
-	
 		std::vector<data>** variables;
 		std::vector<int>** scopes;
+		std::unordered_map<std::string, int> var_names; // debug and libstd
 	
 		int total_variables;
 	
+		Variables();
+		~Variables();
+	
+		void initVariables(int total_variables);
+		int  getVarAddress(const std::string& base);
 		void scope_up();
 		void scope_down();
 		data access(int id);

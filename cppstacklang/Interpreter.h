@@ -13,7 +13,7 @@ class Interpreter {
 		void executeMatOperator(mat_ope_t ope);
 		void executeVarOperator(var_ope_t ope);
 		void executeReference(var_t ref);
-		data pop_stack();
+		data* pop_stack();
 		
 		WorldState* ws;
 };

@@ -4,8 +4,8 @@
 
 WorldState::WorldState() {
 	blocks = std::vector<Block*>();
-	stack = std::deque<data>();
-	var_names = std::unordered_map<std::string, int>();
+	stack = new std::deque<data*>();
+	variables = new Variables();
 }
 
 WorldState::~WorldState() {
@@ -13,25 +13,19 @@ WorldState::~WorldState() {
 	for(int i = 0 ; i < block_size ; i++)
 		delete blocks[i];
 	delete variables;
+	delete stack;
 }
 
 int WorldState::getVarAddress(const std::string& base) {
-	std::unordered_map<std::string, int>::const_iterator got = var_names.find(base);
-	if(got == var_names.end()) {
-		int count = var_names.size();
-		var_names.insert(std::make_pair(base, count));
-		return count;
-	} else {
-		return got->second;	
-	}
+	return variables->getVarAddress(base);
 } 
 
 void WorldState::printStack() {
 	std::cout << "[";
-	std::deque<data>::iterator It;
-	for ( It = stack.begin(); It != stack.end(); It++ )
+	std::deque<data*>::iterator It;
+	for ( It = stack->begin(); It != stack->end(); It++ )
 	{
-		std::cout << Printer::out((*It));
+		std::cout << Printer::out(*(*It));
     }
 	std::cout << "]\n";	
 }

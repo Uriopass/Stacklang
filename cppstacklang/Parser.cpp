@@ -98,7 +98,6 @@ std::pair<int, int> Parser::concatBlock(WorldState* ws, std::vector<Token>& toke
 			std::string tokval = boost::get<std::string>(t.value);
 		
 			if(tokval == "}") {
-			
 				return std::make_pair(i, bId);
 			}
 			if(tokval == "{") {
@@ -126,7 +125,9 @@ WorldState* Parser::parse() {
 	
 	for(int it = 0 ; it < end; it++) {
 		char c = code[it];
+	#ifdef DEBUG
 		std::cout << "Char is " << code[it] << std::endl;
+		#endif
 		if(isdigit(c)) {
 			std::string base("");
 			while(isdigit(code[it]) and it !=end) {
@@ -146,12 +147,13 @@ WorldState* Parser::parse() {
 		} else if(isalpha(c) or c == '_') {
 			std::string base("");
 			while((isalnum(code[it]) or code[it] == '_') and it !=end) {
+				#ifdef DEBUG
 				std::cout << code[it] << std::endl;
+				#endif
 				base += code[it];
 				it++;
 			}
 			
-			std::cout << "Parsed ref " << base << std::endl;
 			var_t var;
 			var.val = ws->getVarAddress(base);
 			
@@ -161,11 +163,12 @@ WorldState* Parser::parse() {
 			it += 1;
 			std::string base("");
 			while((isalnum(code[it]) or code[it] == '_') and it != end) {
+				#ifdef DEBUG
 				std::cout << code[it] << std::endl;
+				#endif
 				base += code[it];
 				it++;
 			}
-			std::cout << "Parsed ref def " << base << std::endl;
 			
 			var_t var;
 			var.val = ws->getVarAddress(base);
@@ -189,31 +192,39 @@ WorldState* Parser::parse() {
 			std::string base("");
 			base += c;
 			Token t(base, TOK_UKN);
+	#ifdef DEBUG
 			std::cout << "Found unknown token : " << c << std::endl;
+	#endif
 			tokens.push_back(t);
 		}
 	}
 	
+	#ifdef DEBUG
 	std::cout << "Raw token parsing (no block concat) gives : " << std::endl;
 	for(int i = 0 ; i < tokens.size() ; i++) {
 		Token t = tokens[i];
 		std::cout << Printer::out(t) << std::endl;
 	}
 	
+	#endif
 	Token endDel("}", TOK_BLO_DEL); // Emulate "main" block
 	tokens.push_back(endDel);
 	
+	#ifdef DEBUG
 	std::pair<int, int> r = concatBlock(ws, tokens, 0);
+	#else
+	concatBlock(ws, tokens, 0);
+	#endif
 	
+	#ifdef DEBUG
 	if(r.first != tokens.size()) {
 		std::cout << "Parsing is weird.." << r.first << " vs " << tokens.size() << std::endl;
 	}
 	if(r.second != 0) {
 		std::cout << "Parsing is weird.." << r.second << std::endl;
 	}
-	
-	std::cout << "Total var are : " << ws->var_names.size() << std::endl;
-	for(auto i : ws->var_names) {
+	std::cout << "Total var are : " << ws->variables->var_names.size() << std::endl;
+	for(auto i : ws->variables->var_names) {
 		std::cout << "\t" << i.first << " " << i.second << std::endl;
 	}
 	
@@ -221,8 +232,9 @@ WorldState* Parser::parse() {
 		std::cout << "Block id " << i << " contains " << std::endl;
 		ws->blocks[i]->print_content();
 	}
-	
-	ws->variables = new Variables(ws->var_names.size());
+	#endif
+	int size = ws->variables->var_names.size();
+	ws->variables->initVariables(size);
 	
 	code.clear(); // We don't need code anymore
 	return ws;

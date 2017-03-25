@@ -2,8 +2,9 @@
 #define TOKEN_H
 
 #include <string>
-#include "Data.h"
 #include <boost/variant.hpp>
+
+#include "Data.h"
 
 typedef enum {
 	TOK_INT,
