@@ -12,7 +12,7 @@ void Block::add_token(Token t) {
 }
 
 void Block::print_content() {
-	for(int i = 0 ; i < tokens.size() ; i++) {
-		std::cout << Printer::out(tokens[i]) << std::endl;
+	for(unsigned int i = 0 ; i < tokens.size() ; i++) {
+		std::cout << Printer::out(tokens[i]) << " " << std::endl;
 	}
 }

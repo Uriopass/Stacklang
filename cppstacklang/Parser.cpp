@@ -56,7 +56,7 @@ bool is_block_delimiter(char c) {
 }
 
 bool is_mat_ope(char c) {
-	return c == '+' or  c == '-' or c == '%';	
+	return c == '+' or  c == '-' or c == '%' or c == '*' or c == '/' or c == '^';	
 }
 
 bool is_var_ope(char c) {
@@ -71,6 +71,12 @@ mat_ope_t parse_mat_ope(char c) {
 			return SUB;
 		case '%':
 			return MOD;
+		case '*':
+			return MUL;
+		case '/':
+			return DIV;
+		case '^':
+			return POW;
 		default:
 			throw "Error parsing math operators";
 	}
@@ -92,7 +98,7 @@ std::pair<int, int> Parser::concatBlock(WorldState* ws, std::vector<Token>& toke
 	Block* b = new Block(bId);
 	ws->blocks.push_back(b);
 	
-	for(int i = start ; i < tokens.size() ; i++) {
+	for(unsigned int i = start ; i < tokens.size() ; i++) {
 		Token t = tokens[i];
 		if(t.type == TOK_BLO_DEL) {
 			std::string tokval = boost::get<std::string>(t.value);
@@ -115,8 +121,29 @@ std::pair<int, int> Parser::concatBlock(WorldState* ws, std::vector<Token>& toke
 	throw "Error parsing blocks";
 }
 
+void Parser::removeComments() {
+	int end = code.size();
+	int s_b;
+	bool removing = false;
+	for(int it = 0 ; it < end; it++) {
+		char c = code[it];
+		//std::cout << "it: " << it << " " << c << " " << s_b << " " << end << '\n' << code; 
+		if(c == '#' and !removing) {
+			s_b = it;
+			removing = true;
+		}
+		if(c == '\n' and removing) {
+			code.erase(s_b, it-s_b+1);
+			end = code.size();
+			it = s_b-1;
+			removing = false;
+		}
+	}
+}
 
 WorldState* Parser::parse() {
+
+	removeComments();
 
 	WorldState* ws = new WorldState();
 	
@@ -138,7 +165,8 @@ WorldState* Parser::parse() {
 			tokens.push_back(t);
 		} else if(is_string_delimiter(c)) {
 			std::string base("");
-			while(is_string_delimiter(code[it]) and it !=end) {
+			it ++;
+			while(!is_string_delimiter(code[it]) and it !=end) {
 				base += code[it];
 				it++;
 			}

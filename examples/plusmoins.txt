@@ -1,7 +1,7 @@
 /if {?} =
 
-/test {1>
-	"Entrez un nombre" output
+/test {
+	"Entrez un nombre : " output
 	/in input stoi =
 	in nb -
 	{

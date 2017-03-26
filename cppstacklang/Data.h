@@ -1,6 +1,5 @@
 #ifndef VALUE_H
 #define VALUE_H
-
 #include <boost/variant.hpp>
 
 #define DATA_V_INT 0

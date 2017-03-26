@@ -1,5 +1,9 @@
 #include <boost/variant.hpp>
 #include <iostream>
+#include <cstdlib>
+#include <string>
+
+#include "Token.h"
 #include "Variables.h"
 #include "Printer.h"
 #include "Data.h"
@@ -20,28 +24,144 @@ void std_repeat(void* p) {
 
 void std_add(void* p) {
 	Interpreter* ip = (Interpreter*)p;
+	ip->executeMatOperator(ADD);
+}
+
+void std_print(void* p) {
+	Interpreter* ip = (Interpreter*)p;
+	data* d = ip->pop_stack();
+	std::cout << Printer::out(*d) << '\n';
+	delete d;
+}
+
+void std_output(void* p) {
+	Interpreter* ip = (Interpreter*)p;
+	data* d = ip->pop_stack();
+	std::cout << Printer::out(*d);
+	delete d;
+}
+
+void std_output(void* p) {
+	Interpreter* ip = (Interpreter*)p;
+	data* d = ip->pop_stack();
+	std::cout << Printer::out(*d);
+	delete d;
+}
+
+void std_input(void* p) {
+	Interpreter* ip = (Interpreter*)p;
+	std::string in;
+	std::cin >> in;
+	ip->ws->stack->push_back(new data(in));
+}
+
+void std_dup(void* p) {
+	Interpreter* ip = (Interpreter*)p;
+	data* d = ip->ws->stack->back();
+	ip->ws->stack->push_back(new data(*d));
+}
+
+void std_stoi(void* p) {
+	Interpreter* ip = (Interpreter*)p;
+	data* d = ip->pop_stack();
+	ip->ws->stack->push_back(new data(std::stoi(boost::get<std::string>(*d))));
+	delete d;
+}
+
+void init_rand() {
+	srand(0);
+}
+
+void std_rand(void* p) {
+	Interpreter* ip = (Interpreter*)p;
+	data* d = ip->pop_stack();
+	ip->ws->stack->push_back(new data(1+rand()%boost::get<int>(*d)));
+}
+
+int compare(data* d, data* d2) {
+	int w1 = (*d).which();
+	int w2 = (*d2).which();
+	if(w1 == DATA_V_INT) {
+		int a = boost::get<int>(*d);
+		
+		if(w2 == DATA_V_INT) {
+			int b = boost::get<int>(*d2);
+			return a == b ? 0 : (a > b ? 1 : -1);
+		} else {
+			double b = boost::get<double>(*d2);
+			return a == b ? 0 : (a > b ? 1 : -1);
+		}
+	} else {
+		double a = boost::get<double>(*d2);
+		
+		if(w2 == DATA_V_INT) {
+			int b = boost::get<int>(*d2);
+			return a == b ? 0 : (a > b ? 1 : -1);
+		} else {
+			double b = boost::get<double>(*d2);
+			return a == b ? 0 : (a > b ? 1 : -1);
+		}
+	}
+}
+
+void std_leq(void* p) {
+	Interpreter* ip = (Interpreter*)p;
 	data* d = ip->pop_stack();
 	data* d2 = ip->pop_stack();
-	int a = boost::get<int>(*d2);
-	int b = boost::get<int>(*d);
-	ip->ws->stack->push_back(new data(a+b));
+	
+	ip->ws->stack->push_back(new data(compare(d2, d) <= 0));
+	
 	delete d;
 	delete d2;
 }
 
-Variables::Variables() {
-	var_names = std::unordered_map<std::string, int>();
-	// Initialize libstd
-	int count = 0;
-	var_names.insert(std::make_pair("repeat", count++));
-	var_names.insert(std::make_pair("add", count++));
+void std_geq(void* p) {
+	Interpreter* ip = (Interpreter*)p;
+	data* d = ip->pop_stack();
+	data* d2 = ip->pop_stack();
+	
+	ip->ws->stack->push_back(new data(compare(d2, d) >= 0));
+	
+	delete d;
+	delete d2;
 }
+
+void std_eq(void* p) {
+	Interpreter* ip = (Interpreter*)p;
+	data* d = ip->pop_stack();
+	data* d2 = ip->pop_stack();
+	
+	ip->ws->stack->push_back(new data(compare(d2, d) == 0));
+	
+	delete d;
+	delete d2;
+}
+
 
 Variables::~Variables() {
 	for(int i = 0 ; i < total_variables ; i++) {
 		delete scopes[i];
 		delete variables[i];
 	}
+}
+
+Variables::Variables() {
+	init_rand();
+	var_names = std::unordered_map<std::string, int>();
+	// Initialize libstd
+	int count = 0;
+	var_names.insert(std::make_pair("repeat", count++));
+	var_names.insert(std::make_pair("add", count++));
+	var_names.insert(std::make_pair("print", count++));
+	var_names.insert(std::make_pair("dup", count++));
+	var_names.insert(std::make_pair("rand", count++));
+	var_names.insert(std::make_pair("output", count++));
+	var_names.insert(std::make_pair("input", count++));
+	var_names.insert(std::make_pair("stoi", count++));
+	var_names.insert(std::make_pair("geq", count++));
+	var_names.insert(std::make_pair("leq", count++));
+	var_names.insert(std::make_pair("eq", count++));
+	
 }
 
 void Variables::initVariables(int total_variables) {
@@ -56,6 +176,15 @@ void Variables::initVariables(int total_variables) {
 	int count = 0;
 	variables[count++]->push_back(std_repeat);
 	variables[count++]->push_back(std_add);
+	variables[count++]->push_back(std_print);
+	variables[count++]->push_back(std_dup);
+	variables[count++]->push_back(std_rand);
+	variables[count++]->push_back(std_output);
+	variables[count++]->push_back(std_input);
+	variables[count++]->push_back(std_stoi);
+	variables[count++]->push_back(std_geq);
+	variables[count++]->push_back(std_leq);
+	variables[count++]->push_back(std_eq);
 }
 
 //std::vector<data> *variables;
@@ -67,7 +196,7 @@ void Variables::scope_up() {
 }
 void Variables::scope_down() {
 	for(int i = 0 ; i < total_variables ; i++) {
-		int cut = scopes[i]->back();
+		unsigned int cut = scopes[i]->back();
 		if(cut < variables[i]->size())
 		{
 			scopes[i]->pop_back();
@@ -93,7 +222,14 @@ data Variables::access(int varId) {
 	#endif
 	std::vector<data> stack = *variables[varId];
 	if(stack.size() == 0) {
-		throw "Variable not defined";
+		std::string name;
+		for(auto& a : var_names) {
+			if(a.second == varId) {
+				name = a.first;
+				break;
+			}
+		}
+		throw std::string("Variable not defined : ") + std::string(name);
 	}
 	return stack.back();
 }

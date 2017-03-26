@@ -73,6 +73,12 @@ def output():
 	if Global.outputToString:
 		Global.optionalOutput += str(Global.stack.pop())
 	else:
+		print(Global.stack.pop(), end="")
+
+def myprint():
+	if Global.outputToString:
+		Global.optionalOutput += str(Global.stack.pop())+'\n'
+	else:
 		print(Global.stack.pop())
 	
 def exch():
@@ -161,5 +167,5 @@ functions = {"dup":					dup,
 			 "if":					myif,
 			 "time":				mytime,
 			 "str":					mystr,
-			 "print":				output,
+			 "print":				myprint,
 			 "neq":					neq}

@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 
 #include "Interpreter.h"
 #include "Parser.h"
@@ -9,17 +10,18 @@ using namespace std;
 
 
 int main(int argc, char** argv) {
-	#ifdef DEBUG
-	cout << "Arguments are : (" << argc << ")" << endl;
-	
-	for(int i = 0 ; i < argc ; i++) {
-		cout << "\t" << argv[i] << endl;
+	if(argc == 0) {
+		std::cout << "No arguments given.. How to use : ./cppstacklang <filename>";
+		return 0;
 	}
-	#endif
+	
+	ifstream ifs(argv[1]);
+  	string content( (std::istreambuf_iterator<char>(ifs) ),
+                       (std::istreambuf_iterator<char>()    ) );
 	
 	Parser* p = new Parser();
 	
-	p->feed("5 {1 @} repeat");
+	p->feed(content);
 	
 	WorldState* ws;
 	try {
@@ -47,9 +49,10 @@ int main(int argc, char** argv) {
 		std::cerr << "Error : " << s << std::endl; 
 		return 1;
 	}
-	
+	#ifdef DEBUG
 	cout << "Stack is now ";
 	a->ws->printStack();
+	#endif
 	delete a;
 	
 	return 0;

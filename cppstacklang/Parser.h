@@ -9,7 +9,7 @@ class Parser {
 		Parser();
 		void feed(const std::string& code);
 		std::pair<int, int> concatBlock(WorldState* ws, std::vector<Token>& tokens, int start);
-		
+		void removeComments();
 		std::string code;
 		WorldState* parse();
 };

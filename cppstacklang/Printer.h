@@ -64,32 +64,32 @@ class Printer {
 		int which = t.which();
 		if(which == DATA_V_BLO_REF) {
 			std::ostringstream ostr;
-			ostr << boost::get<blo_ref_t>(t).ref << "r ";
+			ostr << boost::get<blo_ref_t>(t).ref << "r";
     		return ostr.str();
 		}
     	if(which == DATA_V_INT) {
 			
 			std::ostringstream ostr;
-    		ostr << boost::get<int>(t) << " ";
+    		ostr << boost::get<int>(t);
     		return ostr.str();
     	
     	}
     	if(which == DATA_V_DOUBLE) {
 			
 			std::ostringstream ostr;
-			ostr << boost::get<double>(t) << " ";
+			ostr << boost::get<double>(t);
     		return ostr.str();
     	}
     	if(which == DATA_V_VAR) {
     		
 			std::ostringstream ostr;
-    		ostr << boost::get<var_t>(t).val << "v ";
+    		ostr << boost::get<var_t>(t).val << "v";
     		return ostr.str();
 		}
     	if(which == DATA_V_STRING) {
     	
 			std::ostringstream ostr;
-    		ostr << boost::get<std::string>(t) << "v ";
+    		ostr << boost::get<std::string>(t);
     		return ostr.str();
     	}
     	return std::string("");

@@ -1,6 +1,7 @@
 #include "Interpreter.h"
 #include <iostream>
 #include <boost/variant.hpp>
+#include <cmath>
 #include "Printer.h"
 
 Interpreter::Interpreter(WorldState* ws) {
@@ -23,22 +24,71 @@ void Interpreter::executeMatOperator(mat_ope_t ope) {
 		{
 			data* d = pop_stack();
 			data* d2 = pop_stack();
-			int a = boost::get<int>(*d);
-			int b = boost::get<int>(*d2);
+			int w1 = (*d).which();
+			int w2 = (*d2).which();
+			
+			if(w1 == DATA_V_STRING or w2 == DATA_V_STRING) {
+				if(w1 == w2) {
+					ws->stack->push_back(new data(boost::get<std::string>(*d2)+boost::get<std::string>(*d)));
+				} else {
+					throw "Cannot add string and anything else than string";
+				}
+			} else if(w1 == DATA_V_INT) {
+				int a = boost::get<int>(*d);
+				
+				if(w2 == DATA_V_INT) {
+					int b = boost::get<int>(*d2);
+					ws->stack->push_back(new data(b+a));
+				} else {
+					double b = boost::get<double>(*d2);
+					ws->stack->push_back(new data(b+a));
+				}
+			} else {
+				double a = boost::get<double>(*d2);
+				
+				if(w2 == DATA_V_INT) {
+					int b = boost::get<int>(*d2);
+					ws->stack->push_back(new data(b+a));
+				} else {
+					double b = boost::get<double>(*d2);
+					ws->stack->push_back(new data(b+a));
+				}
+			}
 			delete d;
 			delete d2;
-			ws->stack->push_back(new data(b+a));
 		}
 		break;
 		case SUB:
 		{
 			data* d = pop_stack();
 			data* d2 = pop_stack();
-			int a = boost::get<int>(*d);
-			int b = boost::get<int>(*d2);
+			int w1 = (*d).which();
+			int w2 = (*d2).which();
+			
+			if(w1 == DATA_V_INT) {
+				int a = boost::get<int>(*d);
+				
+				if(w2 == DATA_V_INT) {
+					int b = boost::get<int>(*d2);
+					ws->stack->push_back(new data(b-a));
+				} else {
+					double b = boost::get<double>(*d2);
+					ws->stack->push_back(new data(b-a));
+				}
+			} else {
+				double a = boost::get<double>(*d2);
+				
+				if(w2 == DATA_V_INT) {
+					int b = boost::get<int>(*d2);
+					ws->stack->push_back(new data(b-a));
+				} else {
+					double b = boost::get<double>(*d2);
+					ws->stack->push_back(new data(b-a));
+				}
+			}
+			
 			delete d;
 			delete d2;
-			ws->stack->push_back(new data(b-a));
 		}
 		break;
 		case MOD:
@@ -51,6 +101,105 @@ void Interpreter::executeMatOperator(mat_ope_t ope) {
 			delete d2;
 			ws->stack->push_back(new data(b%a));
 		}
+		case MUL:
+		{
+			data* d = pop_stack();
+			data* d2 = pop_stack();
+			int w1 = (*d).which();
+			int w2 = (*d2).which();
+			
+			if(w1 == DATA_V_INT) {
+				int a = boost::get<int>(*d);
+				
+				if(w2 == DATA_V_INT) {
+					int b = boost::get<int>(*d2);
+					ws->stack->push_back(new data(b*a));
+				} else {
+					double b = boost::get<double>(*d2);
+					ws->stack->push_back(new data(b*a));
+				}
+			} else {
+				double a = boost::get<double>(*d2);
+				
+				if(w2 == DATA_V_INT) {
+					int b = boost::get<int>(*d2);
+					ws->stack->push_back(new data(b*a));
+				} else {
+					double b = boost::get<double>(*d2);
+					ws->stack->push_back(new data(b*a));
+				}
+			}
+			
+			delete d;
+			delete d2;
+		}
+		break;
+		case DIV:
+		{
+			data* d = pop_stack();
+			data* d2 = pop_stack();
+			int w1 = (*d).which();
+			int w2 = (*d2).which();
+			
+			if(w1 == DATA_V_INT) {
+				int a = boost::get<int>(*d);
+				
+				if(w2 == DATA_V_INT) {
+					double b = (double)boost::get<int>(*d2);
+					ws->stack->push_back(new data(b/a));
+				} else {
+					double b = boost::get<double>(*d2);
+					ws->stack->push_back(new data(b/a));
+				}
+			} else {
+				double a = boost::get<double>(*d2);
+				
+				if(w2 == DATA_V_INT) {
+					int b = boost::get<int>(*d2);
+					ws->stack->push_back(new data(b/a));
+				} else {
+					double b = boost::get<double>(*d2);
+					ws->stack->push_back(new data(b/a));
+				}
+			}
+			
+			delete d;
+			delete d2;
+		}
+		break;
+		case POW:
+		{
+			data* d = pop_stack();
+			data* d2 = pop_stack();
+			int w1 = (*d).which();
+			int w2 = (*d2).which();
+			
+			if(w1 == DATA_V_INT) {
+				int a = boost::get<int>(*d);
+				
+				if(w2 == DATA_V_INT) {
+					double b = (double)boost::get<int>(*d2);
+					ws->stack->push_back(new data(pow(b, a)));
+				} else {
+					double b = boost::get<double>(*d2);
+					ws->stack->push_back(new data(pow(b, a)));
+				}
+			} else {
+				double a = boost::get<double>(*d2);
+				
+				if(w2 == DATA_V_INT) {
+					int b = boost::get<int>(*d2);
+					ws->stack->push_back(new data(pow(b, a)));
+				} else {
+					double b = boost::get<double>(*d2);
+					ws->stack->push_back(new data(pow(b, a)));
+				}
+			}
+			
+			delete d;
+			delete d2;
+		}
+		break;
 		default:
 		break;
 	}
@@ -133,7 +282,11 @@ void Interpreter::executeToken(Token t) {
 		case TOK_REF:
 			executeReference(boost::get<var_t>(t.value));
 		break;
-			
+		 
+		case TOK_STRING:
+			ws->stack->push_back(new data(boost::get<std::string>(t.value)));
+		break;
+		
 		case TOK_VAR_OPE:
 			executeVarOperator(boost::get<var_ope_t>(t.value));
 		break;
@@ -144,12 +297,14 @@ void Interpreter::executeToken(Token t) {
 		
 		case TOK_UKN:
 		{
+			/*
 			std::string val = boost::get<std::string>(t.value);
 			data* d = pop_stack();
 			if(val == "@") {
 				std::cout << Printer::out(*d) << std::endl;
 			}
 			delete d;
+			*/
 		}
 		break;
 		
@@ -184,13 +339,17 @@ void Interpreter::executeBlock(int id) {
 }
 
 void Interpreter::execute() {
+	#ifdef DEBUG
 	std::cout << "Number of blocks : " << ws->blocks.size() << std::endl;
-
+	#endif
 	if(ws->blocks.size() == 0) {
 		throw "Nothing to execute";
 	}
-	
+	#ifdef DEBUG
 	std::cout << "Starting program" << std::endl;
+	#endif
 	executeBlock(0);
+	#ifdef DEBUG
 	std::cout << "Ending program" << std::endl;
+	#endif
 }

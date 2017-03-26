@@ -21,7 +21,10 @@ typedef enum {
 typedef enum {
 	ADD,
 	SUB,
-	MOD
+	MUL,
+	DIV,
+	MOD,
+	POW
 } mat_ope_t;
 
 typedef enum {

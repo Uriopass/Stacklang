@@ -25,7 +25,7 @@ void WorldState::printStack() {
 	std::deque<data*>::iterator It;
 	for ( It = stack->begin(); It != stack->end(); It++ )
 	{
-		std::cout << Printer::out(*(*It));
+		std::cout << Printer::out(*(*It)) << " ";
     }
 	std::cout << "]\n";	
 }
