@@ -22,22 +22,45 @@ void std_repeat(void* p) {
 	delete d2;
 }
 
-void std_add(void* p) {
+void std_while(void* p) {
 	Interpreter* ip = (Interpreter*)p;
-	ip->executeMatOperator(ADD);
+	
+	data* d = ip->pop_stack();
+	blo_ref_t block = boost::get<blo_ref_t>(*d);
+	
+	data* d2 = ip->pop_stack();
+	blo_ref_t cond = boost::get<blo_ref_t>(*d2);
+	
+	while(true) {
+		ip->executeBlock(cond.ref);
+	
+		data* c = ip->pop_stack();
+		int ok = boost::get<int>(*c);
+		delete c;
+		if(!ok) {
+			break;
+		}
+		ip->executeBlock(block.ref);
+	}
+	
+	delete d;
+	delete d2;
+}
+
+void std_if(void* p) {
+	Interpreter* ip = (Interpreter*)p;
+	ip->executeVarOperator(IF);
+}
+
+void std_def(void* p) {
+	Interpreter* ip = (Interpreter*)p;
+	ip->executeVarOperator(DEF);
 }
 
 void std_print(void* p) {
 	Interpreter* ip = (Interpreter*)p;
 	data* d = ip->pop_stack();
 	std::cout << Printer::out(*d) << '\n';
-	delete d;
-}
-
-void std_output(void* p) {
-	Interpreter* ip = (Interpreter*)p;
-	data* d = ip->pop_stack();
-	std::cout << Printer::out(*d);
 	delete d;
 }
 
@@ -151,7 +174,7 @@ Variables::Variables() {
 	// Initialize libstd
 	int count = 0;
 	var_names.insert(std::make_pair("repeat", count++));
-	var_names.insert(std::make_pair("add", count++));
+	var_names.insert(std::make_pair("if", count++));
 	var_names.insert(std::make_pair("print", count++));
 	var_names.insert(std::make_pair("dup", count++));
 	var_names.insert(std::make_pair("rand", count++));
@@ -161,6 +184,8 @@ Variables::Variables() {
 	var_names.insert(std::make_pair("geq", count++));
 	var_names.insert(std::make_pair("leq", count++));
 	var_names.insert(std::make_pair("eq", count++));
+	var_names.insert(std::make_pair("while", count++));
+	var_names.insert(std::make_pair("def", count++));
 	
 }
 
@@ -175,7 +200,7 @@ void Variables::initVariables(int total_variables) {
 	}
 	int count = 0;
 	variables[count++]->push_back(std_repeat);
-	variables[count++]->push_back(std_add);
+	variables[count++]->push_back(std_if);
 	variables[count++]->push_back(std_print);
 	variables[count++]->push_back(std_dup);
 	variables[count++]->push_back(std_rand);
@@ -185,6 +210,8 @@ void Variables::initVariables(int total_variables) {
 	variables[count++]->push_back(std_geq);
 	variables[count++]->push_back(std_leq);
 	variables[count++]->push_back(std_eq);
+	variables[count++]->push_back(std_while);
+	variables[count++]->push_back(std_def);
 }
 
 //std::vector<data> *variables;

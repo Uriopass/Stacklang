@@ -235,10 +235,9 @@ void Interpreter::executeVarOperator(var_ope_t ope) {
 		case DEF:
 		{
 			data* stor = pop_stack();
-			data* d = pop_stack();
-			var_t v = boost::get<var_t>(*d);
+			var_t v = ws->var_stack->back();
 			ws->variables->store(v.val, *stor);
-			delete d;
+			ws->var_stack->pop_back();
 		}
 		break;
 		case IF:
@@ -292,7 +291,7 @@ void Interpreter::executeToken(Token t) {
 		break;
 			
 		case TOK_REF_DEF:
-			ws->stack->push_back(new data(boost::get<var_t>(t.value)));
+			ws->var_stack->push_back(boost::get<var_t>(t.value));
 		break;
 		
 		case TOK_UKN:

@@ -1,22 +1,22 @@
 /if {?} =
 
 /test {
-	"Entrez un nombre : " output
+	"Entrez un nombre (0-100) : " output
 	/in input stoi =
 	in nb -
 	{
 		in nb leq 
 		{
-			"Plus grand" output
+			"Plus grand" print
 		}
 		{
-			"Plus petit" output
+			"Plus petit" print
 		}
 		if
 		test
 	}
 	{
-		"Bravo!" output
+		"Bravo!" print
 	}
 	if
 } =

@@ -1,7 +1,9 @@
 /fib
 {
-	/in =
-	in 1 -
+	/in def
+	#"in : " output
+	#in print
+	in 2 geq
 	{
 		in 2 - fib 
 		in 1 - fib
@@ -10,7 +12,13 @@
 	{
 		1
 	}
-	?
-} =
-"fibo de 5 est" output
-5 fib output
+	if
+} def
+/i 0 def
+10 {
+	"fib(" output
+	     i output
+	      ") = " output
+	           i fib print
+	/i i 1 + def
+} repeat

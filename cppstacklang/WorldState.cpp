@@ -6,6 +6,7 @@ WorldState::WorldState() {
 	blocks = std::vector<Block*>();
 	stack = new std::deque<data*>();
 	variables = new Variables();
+	var_stack = new std::deque<var_t>();
 }
 
 WorldState::~WorldState() {
