@@ -2,6 +2,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <string>
+#include <algorithm>
 
 #include "Token.h"
 #include "Variables.h"
@@ -9,6 +10,8 @@
 #include "Data.h"
 #include "Interpreter.h"
 
+// START STDLIB
+// LOOPS
 void std_repeat(void* p) {
 	Interpreter* ip = (Interpreter*)p;
 	data* d = ip->pop_stack();
@@ -47,6 +50,7 @@ void std_while(void* p) {
 	delete d2;
 }
 
+// VAR OPE SUGAR
 void std_if(void* p) {
 	Interpreter* ip = (Interpreter*)p;
 	ip->executeVarOperator(IF);
@@ -56,6 +60,8 @@ void std_def(void* p) {
 	Interpreter* ip = (Interpreter*)p;
 	ip->executeVarOperator(DEF);
 }
+
+// I/O
 
 void std_print(void* p) {
 	Interpreter* ip = (Interpreter*)p;
@@ -78,12 +84,41 @@ void std_input(void* p) {
 	ip->ws->stack->push_back(new data(in));
 }
 
+// STACK OPE
+
+void std_exch(void* p) {
+	Interpreter* ip = (Interpreter*)p;
+	data* d = ip->pop_stack();
+	std::iter_swap(ip->ws->stack->end()-1,ip->ws->stack->end()-1-boost::get<int>(*d));
+	delete d;
+}
+
+void std_swap(void* p) {
+	Interpreter* ip = (Interpreter*)p;
+	std::iter_swap(ip->ws->stack->end()-1,ip->ws->stack->end()-2);
+}
+
+void std_getpush(void* p) {
+	Interpreter* ip = (Interpreter*)p;
+	data* d = ip->pop_stack();
+	int offset = boost::get<int>(*d);
+	delete d;
+	
+	data* d2 = *(ip->ws->stack->end()-1-offset);
+	ip->ws->stack->push_back(new data(*d2));
+}
+
 void std_dup(void* p) {
 	Interpreter* ip = (Interpreter*)p;
 	data* d = ip->ws->stack->back();
 	ip->ws->stack->push_back(new data(*d));
 }
 
+void std_pop(void* p) {
+	Interpreter* ip = (Interpreter*)p;
+	delete ip->pop_stack();
+}
+// CONVERSIONS
 void std_stoi(void* p) {
 	Interpreter* ip = (Interpreter*)p;
 	data* d = ip->pop_stack();
@@ -91,6 +126,7 @@ void std_stoi(void* p) {
 	delete d;
 }
 
+// RANDOM
 void init_rand() {
 	srand(0);
 }
@@ -101,6 +137,7 @@ void std_rand(void* p) {
 	ip->ws->stack->push_back(new data(1+rand()%boost::get<int>(*d)));
 }
 
+// BOOLEANS OP
 int compare(data* d, data* d2) {
 	int w1 = (*d).which();
 	int w2 = (*d2).which();
@@ -161,6 +198,8 @@ void std_eq(void* p) {
 }
 
 
+// END STDLIB
+
 Variables::~Variables() {
 	for(int i = 0 ; i < total_variables ; i++) {
 		delete scopes[i];
@@ -176,7 +215,11 @@ Variables::Variables() {
 	var_names.insert(std::make_pair("repeat", count++));
 	var_names.insert(std::make_pair("if", count++));
 	var_names.insert(std::make_pair("print", count++));
+	var_names.insert(std::make_pair("exch", count++));
+	var_names.insert(std::make_pair("swap", count++));
+	var_names.insert(std::make_pair("getpush", count++));
 	var_names.insert(std::make_pair("dup", count++));
+	var_names.insert(std::make_pair("pop", count++));
 	var_names.insert(std::make_pair("rand", count++));
 	var_names.insert(std::make_pair("output", count++));
 	var_names.insert(std::make_pair("input", count++));
@@ -202,7 +245,11 @@ void Variables::initVariables(int total_variables) {
 	variables[count++]->push_back(std_repeat);
 	variables[count++]->push_back(std_if);
 	variables[count++]->push_back(std_print);
+	variables[count++]->push_back(std_exch);
+	variables[count++]->push_back(std_swap);
+	variables[count++]->push_back(std_getpush);
 	variables[count++]->push_back(std_dup);
+	variables[count++]->push_back(std_pop);
 	variables[count++]->push_back(std_rand);
 	variables[count++]->push_back(std_output);
 	variables[count++]->push_back(std_input);

@@ -1,4 +1,23 @@
-1 #123
-2 #18 
-#123
-+
+3 2 1
+swap
+output output output
+"" print
+
+3 2 1
+0 getpush
+output output output output
+"" print
+
+3 2 1
+dup
+output output output output
+"" print
+
+3 2 1
+1 exch
+output output output
+"" print
+3 2 1
+pop
+output output
+""print
