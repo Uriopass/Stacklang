@@ -1,25 +1,29 @@
-/if {?} =
-
 /test {
-	"Entrez un nombre (0-100) : " output
-	/in input stoi =
-	in nb -
+	/in 0 def
+	{1 0 in geq 100 leq in * -} # 0 <= in <= 100
+	{
+		"Enter a number (0-100) : " output
+		/in input stoi def
+	}
+	while
+		
+	in nb eq
+	{
+		"You win!" print
+	}
 	{
 		in nb leq 
 		{
-			"Plus grand" print
+			"Bigger" print
 		}
 		{
-			"Plus petit" print
+			"Lesser" print
 		}
 		if
 		test
 	}
-	{
-		"Bravo!" print
-	}
 	if
-} =
+} def
 
-/nb 100 rand =
+/nb 100 rand def
 test

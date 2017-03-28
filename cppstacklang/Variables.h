@@ -4,6 +4,7 @@
 #include "Data.h"
 #include <vector>
 #include <unordered_map>
+#include <string>
 
 class Variables {
 	public:
@@ -16,6 +17,7 @@ class Variables {
 		Variables();
 		~Variables();
 	
+		std::string findName(int varId);
 		void initVariables(int total_variables);
 		int  getVarAddress(const std::string& base);
 		void scope_up();

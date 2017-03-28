@@ -1,4 +1,3 @@
-disablelocalstack
 /isprime {
 	/n def
 	
@@ -27,12 +26,13 @@ disablelocalstack
 	} 
 	if
 } def
-"Enter a number to test" output
+
+"Enter a number to test : " output
 /in input stoi def
 in isprime dup
 {
-	"The number you entered is not prime because divisor " swap str + output
+	"The number you entered is not prime because divisor " swap str + print
 } 
 { 
-	"The number you entered is prime" output
+	"The number you entered is prime" print
 } ?

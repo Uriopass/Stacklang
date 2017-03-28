@@ -1,23 +1,2 @@
-3 2 1
-swap
-output output output
-"" print
-
-3 2 1
-0 getpush
-output output output output
-"" print
-
-3 2 1
-dup
-output output output output
-"" print
-
-3 2 1
-1 exch
-output output output
-"" print
-3 2 1
-pop
-output output
-""print
+50 50 2 %
+print

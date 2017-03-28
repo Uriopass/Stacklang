@@ -1,8 +1,6 @@
 /fib
 {
 	/in def
-	#"in : " output
-	#in print
 	in 2 geq
 	{
 		in 2 - fib 
@@ -14,11 +12,8 @@
 	}
 	if
 } def
-/i 0 def
-10 {
-	"fib(" output
-	     i output
-	      ") = " output
-	           i fib print
-	/i i 1 + def
-} repeat
+
+"Enter indice of fibonacci to calculate : " output
+/x input stoi def # x = stoi(input())
+"fib(" output x output ") = " output # fib(x) = 
+x fib print

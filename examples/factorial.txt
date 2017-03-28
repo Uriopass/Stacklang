@@ -1,6 +1,6 @@
 /fact 
 {
-	dup 1 - # "dup" duplicates the top of the stack, here the input. Then test for input = 1
+	dup 2 geq  # "dup" duplicates the top of the stack, here the input. Then test for input > 1
 	{
 		dup 1 - fact * # Returns input * fact(input - 1)
 	}
@@ -9,5 +9,7 @@
 	}
 	?
 } =
-
-6 fact print # Puts 120 on the stack
+"Enter number to factorial : " output
+/x input stoi def # x = stoi(input())
+x output "! = " output # x! = 
+x fact print

@@ -4,11 +4,18 @@
 	} {
 		2 /
 	} ?
-} =
-"Enter a number to test : " output
-/x input stoi =
-{ x 4 - }
-{ /x x iteration =
+} def
+
+/x 0 =
+{0 leq}
+{
+	"Enter a number to test : " output
+	/x input stoi def
+}
+while
+
+{ x 4 neq }
+{ /x x iteration def
 	 x print }
 while
-"found 4, over" print
+"found 4, over. " print

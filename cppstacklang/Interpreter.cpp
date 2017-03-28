@@ -97,10 +97,11 @@ void Interpreter::executeMatOperator(mat_ope_t ope) {
 			data* d2 = pop_stack();
 			int a = boost::get<int>(*d);
 			int b = boost::get<int>(*d2);
+			ws->stack->push_back(new data(b%a));
 			delete d;
 			delete d2;
-			ws->stack->push_back(new data(b%a));
 		}
+		break;
 		case MUL:
 		{
 			data* d = pop_stack();
@@ -145,8 +146,13 @@ void Interpreter::executeMatOperator(mat_ope_t ope) {
 				int a = boost::get<int>(*d);
 				
 				if(w2 == DATA_V_INT) {
-					double b = (double)boost::get<int>(*d2);
-					ws->stack->push_back(new data(b/a));
+					int b = boost::get<int>(*d2);
+					if(a%b == 0) {
+						ws->stack->push_back(new data(b/a));
+					}
+					else {
+						ws->stack->push_back(new data((double)(b)/a));
+					}
 				} else {
 					double b = boost::get<double>(*d2);
 					ws->stack->push_back(new data(b/a));

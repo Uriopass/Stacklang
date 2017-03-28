@@ -126,6 +126,16 @@ void std_stoi(void* p) {
 	delete d;
 }
 
+void std_str(void* p) {
+	Interpreter* ip = (Interpreter*)p;
+	data* d = ip->pop_stack();
+	if(d->which() == DATA_V_INT)
+		ip->ws->stack->push_back(new data(std::to_string(boost::get<int>(*d))));
+	else if(d->which() == DATA_V_DOUBLE)
+		ip->ws->stack->push_back(new data(std::to_string(boost::get<double>(*d))));
+	delete d;
+}
+
 // RANDOM
 void init_rand() {
 	srand(0);
@@ -135,6 +145,7 @@ void std_rand(void* p) {
 	Interpreter* ip = (Interpreter*)p;
 	data* d = ip->pop_stack();
 	ip->ws->stack->push_back(new data(1+rand()%boost::get<int>(*d)));
+	delete d;
 }
 
 // BOOLEANS OP
@@ -152,7 +163,7 @@ int compare(data* d, data* d2) {
 			return a == b ? 0 : (a > b ? 1 : -1);
 		}
 	} else {
-		double a = boost::get<double>(*d2);
+		double a = boost::get<double>(*d);
 		
 		if(w2 == DATA_V_INT) {
 			int b = boost::get<int>(*d2);
@@ -197,6 +208,16 @@ void std_eq(void* p) {
 	delete d2;
 }
 
+void std_neq(void* p) {
+	Interpreter* ip = (Interpreter*)p;
+	data* d = ip->pop_stack();
+	data* d2 = ip->pop_stack();
+	
+	ip->ws->stack->push_back(new data(compare(d2, d) != 0));
+	
+	delete d;
+	delete d2;
+}
 
 // END STDLIB
 
@@ -224,9 +245,11 @@ Variables::Variables() {
 	var_names.insert(std::make_pair("output", count++));
 	var_names.insert(std::make_pair("input", count++));
 	var_names.insert(std::make_pair("stoi", count++));
+	var_names.insert(std::make_pair("str", count++));
 	var_names.insert(std::make_pair("geq", count++));
 	var_names.insert(std::make_pair("leq", count++));
 	var_names.insert(std::make_pair("eq", count++));
+	var_names.insert(std::make_pair("neq", count++));
 	var_names.insert(std::make_pair("while", count++));
 	var_names.insert(std::make_pair("def", count++));
 	
@@ -254,9 +277,11 @@ void Variables::initVariables(int total_variables) {
 	variables[count++]->push_back(std_output);
 	variables[count++]->push_back(std_input);
 	variables[count++]->push_back(std_stoi);
+	variables[count++]->push_back(std_str);
 	variables[count++]->push_back(std_geq);
 	variables[count++]->push_back(std_leq);
 	variables[count++]->push_back(std_eq);
+	variables[count++]->push_back(std_neq);
 	variables[count++]->push_back(std_while);
 	variables[count++]->push_back(std_def);
 }
@@ -290,19 +315,24 @@ int Variables::getVarAddress(const std::string& base) {
 	}
 } 
 
+std::string Variables::findName(int varId) {
+	std::string name;
+	for(auto& a : var_names) {
+		if(a.second == varId) {
+			name = a.first;
+			break;
+		}
+	}
+	return name;
+}
+
 data Variables::access(int varId) {
 	#ifdef DEBUG
-	std::cout << "Accessing " << varId << std::endl;
+	std::cout << "Accessing " << varId << " (" << findName(varId) << ")" << std::endl;
 	#endif
 	std::vector<data> stack = *variables[varId];
 	if(stack.size() == 0) {
-		std::string name;
-		for(auto& a : var_names) {
-			if(a.second == varId) {
-				name = a.first;
-				break;
-			}
-		}
+		std::string name = findName(varId);
 		throw std::string("Variable not defined : ") + std::string(name);
 	}
 	return stack.back();

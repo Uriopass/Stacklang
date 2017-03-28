@@ -1,15 +1,16 @@
 /fib {
-	/n =
-	1 1 # valeurs de base
-	n 1 - # n-1 boucles
+	/n def # Argument
+	1 1
+	n 1 - # repeat n-1 times
 	{
 		dup       # [3, 4] 		 -> [3, 4, 4]
 		2 getpush # [3, 4, 4]    -> [3, 4, 4, 3]
-		+ #         [3, 4, 4, 3] -> [3, 4, 3+4]
-		2 exch #    [3, 4, 3+4]  -> [4, 3+4, 3]
-		pop #       [4, 3+4, 3]  -> [4, 3+4]
-	} repeat # on boucle
-} =
-
-2 fib
-output
+		+         # [3, 4, 4, 3] -> [3, 4, 3+4]
+		2 exch    # [3, 4, 3+4]  -> [4, 3+4, 3]
+		pop       # [4, 3+4, 3]  -> [4, 3+4]
+	} repeat
+} def
+"Enter indice of fibonacci to calculate : " output
+/x input stoi def # x = stoi(input())
+"fib(" output x output ") = " output # fib(x) = 
+x fib print
