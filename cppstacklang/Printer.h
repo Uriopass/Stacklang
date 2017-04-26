@@ -77,7 +77,8 @@ class Printer {
     	if(which == DATA_V_DOUBLE) {
 			
 			std::ostringstream ostr;
-			ostr << boost::get<double>(t);
+			double d = boost::get<double>(t);
+			ostr << d;
     		return ostr.str();
     	}
     	if(which == DATA_V_VAR) {

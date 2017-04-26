@@ -12,9 +12,9 @@ LIBS =
 # General compiler flags
 COMPILE_FLAGS = -Wall -std=c++11
 # Additional release-specific flags
-RCOMPILE_FLAGS = -D NDEBUG -O3
+RCOMPILE_FLAGS = -O3
 # Additional debug-specific flags
-DCOMPILE_FLAGS = -D DEBUG -g
+DCOMPILE_FLAGS = -g  -D DEBUG 
 # Add additional include paths
 INCLUDES = -I $(SRC_PATH) -I/usr/lib/sagemath/local/include -I/usr/local/Cellar/boost/1.63.0/include
 # General linker settings

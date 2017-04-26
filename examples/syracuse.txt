@@ -7,7 +7,7 @@
 } def
 
 /x 0 =
-{0 leq}
+{x 0 leq}
 {
 	"Enter a number to test : " output
 	/x input stoi def
@@ -18,4 +18,4 @@ while
 { /x x iteration def
 	 x print }
 while
-"found 4, over. " print
+"found 4, over" print

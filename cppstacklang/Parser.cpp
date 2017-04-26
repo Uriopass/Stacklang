@@ -152,21 +152,22 @@ WorldState* Parser::parse() {
 	
 	for(int it = 0 ; it < end; it++) {
 		char c = code[it];
-	#ifdef DEBUG
-		std::cout << "Char is " << code[it] << std::endl;
+		#ifdef DEBUG
+			std::cout << "Char is " << code[it] << std::endl;
 		#endif
 		if(isdigit(c)) {
 			std::string base("");
-			while(isdigit(code[it]) and it !=end) {
+			while(it != end and isdigit(code[it])) {
 				base += code[it];
 				it++;
 			}
+			it --;
 			Token t(std::stoi(base), TOK_INT);
 			tokens.push_back(t);
 		} else if(is_string_delimiter(c)) {
 			std::string base("");
 			it ++;
-			while(!is_string_delimiter(code[it]) and it !=end) {
+			while(it != end and !is_string_delimiter(code[it])) {
 				base += code[it];
 				it++;
 			}
@@ -174,13 +175,14 @@ WorldState* Parser::parse() {
 			tokens.push_back(t);
 		} else if(isalpha(c) or c == '_') {
 			std::string base("");
-			while((isalnum(code[it]) or code[it] == '_') and it !=end) {
+			while(it != end and (isalnum(code[it]) or code[it] == '_')) {
 				#ifdef DEBUG
 				std::cout << code[it] << std::endl;
 				#endif
 				base += code[it];
 				it++;
 			}
+			it --;
 			
 			var_t var;
 			var.val = ws->getVarAddress(base);
@@ -190,13 +192,14 @@ WorldState* Parser::parse() {
 		} else if(c == '/' and (it+1) != end and isalpha(code[it+1])) {
 			it += 1;
 			std::string base("");
-			while((isalnum(code[it]) or code[it] == '_') and it != end) {
+			while(it != end and (isalnum(code[it]) or code[it] == '_')) {
 				#ifdef DEBUG
 				std::cout << code[it] << std::endl;
 				#endif
 				base += code[it];
 				it++;
 			}
+			it --;
 			
 			var_t var;
 			var.val = ws->getVarAddress(base);

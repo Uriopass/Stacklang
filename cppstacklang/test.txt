@@ -1,2 +1,3 @@
-50 50 2 %
-print
+/a 0 def
+/b a def
+/a 1 def

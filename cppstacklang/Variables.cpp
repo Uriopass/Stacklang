@@ -122,8 +122,9 @@ void std_pop(void* p) {
 void std_stoi(void* p) {
 	Interpreter* ip = (Interpreter*)p;
 	data* d = ip->pop_stack();
-	ip->ws->stack->push_back(new data(std::stoi(boost::get<std::string>(*d))));
+	int i = std::stoi(boost::get<std::string>(*d));
 	delete d;
+	ip->ws->stack->push_back(new data(i));
 }
 
 void std_str(void* p) {
@@ -224,8 +225,15 @@ void std_neq(void* p) {
 Variables::~Variables() {
 	for(int i = 0 ; i < total_variables ; i++) {
 		delete scopes[i];
+		for(int j = 0 ; j < variables[i]->size() ; j++)
+		{
+			delete variables[i]->back();
+			variables[i]->pop_back();
+		}
 		delete variables[i];
 	}
+	delete[] variables;
+	delete[] scopes;
 }
 
 Variables::Variables() {
@@ -257,33 +265,35 @@ Variables::Variables() {
 
 void Variables::initVariables(int total_variables) {
 	this->total_variables = total_variables;
-	variables = new std::vector<data>*[total_variables];
+	
+	variables = new std::vector<data*>*[total_variables];
 	scopes = new std::vector<int>*[total_variables];
 	
 	for(int i = 0 ; i < total_variables ; i++) {
 		scopes[i] = new std::vector<int>();
-		variables[i] = new std::vector<data>();
+		scopes[i]->push_back(0);
+		variables[i] = new std::vector<data*>();
 	}
 	int count = 0;
-	variables[count++]->push_back(std_repeat);
-	variables[count++]->push_back(std_if);
-	variables[count++]->push_back(std_print);
-	variables[count++]->push_back(std_exch);
-	variables[count++]->push_back(std_swap);
-	variables[count++]->push_back(std_getpush);
-	variables[count++]->push_back(std_dup);
-	variables[count++]->push_back(std_pop);
-	variables[count++]->push_back(std_rand);
-	variables[count++]->push_back(std_output);
-	variables[count++]->push_back(std_input);
-	variables[count++]->push_back(std_stoi);
-	variables[count++]->push_back(std_str);
-	variables[count++]->push_back(std_geq);
-	variables[count++]->push_back(std_leq);
-	variables[count++]->push_back(std_eq);
-	variables[count++]->push_back(std_neq);
-	variables[count++]->push_back(std_while);
-	variables[count++]->push_back(std_def);
+	variables[count++]->push_back(new data(std_repeat));
+	variables[count++]->push_back(new data(std_if));
+	variables[count++]->push_back(new data(std_print));
+	variables[count++]->push_back(new data(std_exch));
+	variables[count++]->push_back(new data(std_swap));
+	variables[count++]->push_back(new data(std_getpush));
+	variables[count++]->push_back(new data(std_dup));
+	variables[count++]->push_back(new data(std_pop));
+	variables[count++]->push_back(new data(std_rand));
+	variables[count++]->push_back(new data(std_output));
+	variables[count++]->push_back(new data(std_input));
+	variables[count++]->push_back(new data(std_stoi));
+	variables[count++]->push_back(new data(std_str));
+	variables[count++]->push_back(new data(std_geq));
+	variables[count++]->push_back(new data(std_leq));
+	variables[count++]->push_back(new data(std_eq));
+	variables[count++]->push_back(new data(std_neq));
+	variables[count++]->push_back(new data(std_while));
+	variables[count++]->push_back(new data(std_def));
 }
 
 //std::vector<data> *variables;
@@ -299,7 +309,11 @@ void Variables::scope_down() {
 		if(cut < variables[i]->size())
 		{
 			scopes[i]->pop_back();
-			variables[i]->erase(variables[i]->begin()+cut, variables[i]->end());
+			for(int j = 0 ; j < variables[i]->size()-cut ; j++)
+			{
+				delete variables[i]->back();
+				variables[i]->pop_back();
+			}
 		}
 	}
 }
@@ -326,11 +340,11 @@ std::string Variables::findName(int varId) {
 	return name;
 }
 
-data Variables::access(int varId) {
+data* Variables::access(int varId) {
 	#ifdef DEBUG
 	std::cout << "Accessing " << varId << " (" << findName(varId) << ")" << std::endl;
 	#endif
-	std::vector<data> stack = *variables[varId];
+	std::vector<data*> stack = *variables[varId];
 	if(stack.size() == 0) {
 		std::string name = findName(varId);
 		throw std::string("Variable not defined : ") + std::string(name);
@@ -338,9 +352,15 @@ data Variables::access(int varId) {
 	return stack.back();
 }
 
-void Variables::store(int varId, data d) {
+void Variables::store(int varId, data* d) {
 	#ifdef DEBUG
-	std::cout << "Storing " << varId << " with data " << Printer::out(d) << std::endl;
+	std::cout << "Storing " << varId << " with data " << Printer::out(*d) << std::endl;
 	#endif
-	variables[varId]->push_back(d);
+	if(scopes[varId]->back() == variables[varId]->size()) {
+		variables[varId]->push_back(d);
+	} else {
+		data* p = variables[varId]->back();
+		delete p;
+		p = d;
+	}
 }

@@ -8,7 +8,7 @@
 
 class Variables {
 	public:
-		std::vector<data>** variables;
+		std::vector<data*>** variables;
 		std::vector<int>** scopes;
 		std::unordered_map<std::string, int> var_names; // debug and libstd
 	
@@ -22,8 +22,8 @@ class Variables {
 		int  getVarAddress(const std::string& base);
 		void scope_up();
 		void scope_down();
-		data access(int id);
-		void store(int varId, data d);
+		data* access(int id);
+		void store(int varId, data* d);
 		
 };
 

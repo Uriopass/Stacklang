@@ -13,8 +13,15 @@ WorldState::~WorldState() {
 	int block_size = blocks.size();
 	for(int i = 0 ; i < block_size ; i++)
 		delete blocks[i];
+	int stack_size = stack->size();
+	for(int i = 0 ; i < stack_size; i++)
+	{
+		delete stack->back();
+		stack->pop_back();
+	}
 	delete variables;
 	delete stack;
+	delete var_stack;
 }
 
 int WorldState::getVarAddress(const std::string& base) {

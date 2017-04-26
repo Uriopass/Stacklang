@@ -6,6 +6,10 @@
 
 Interpreter::Interpreter(WorldState* ws) {
 	this->ws = ws;
+	#ifdef DEBUG
+	this->cur_token = 0;
+	this->cur_block = 0;
+	#endif
 }
 
 Interpreter::~Interpreter() {
@@ -13,9 +17,16 @@ Interpreter::~Interpreter() {
 }
 
 data* Interpreter::pop_stack() {
-	data* d = ws->stack->back();
-	ws->stack->pop_back();
-	return d;
+	if(ws->stack->size() > 0) {
+		data* d = ws->stack->back();
+		ws->stack->pop_back();
+		return d;
+	} else {
+		#ifdef DEBUG
+		std::cout << "Error near " << Printer::out(*cur_token) << " in block id " << cur_block << std::endl;
+		#endif
+		throw "Stack is empty";
+	}
 }
 
 void Interpreter::executeMatOperator(mat_ope_t ope) {
@@ -147,7 +158,7 @@ void Interpreter::executeMatOperator(mat_ope_t ope) {
 				
 				if(w2 == DATA_V_INT) {
 					int b = boost::get<int>(*d2);
-					if(a%b == 0) {
+					if(b%a == 0) {
 						ws->stack->push_back(new data(b/a));
 					}
 					else {
@@ -212,12 +223,12 @@ void Interpreter::executeMatOperator(mat_ope_t ope) {
 }
 
 void Interpreter::executeReference(var_t ref) {
-	data d = ws->variables->access(ref.val);
+	data* d = ws->variables->access(ref.val);
 	#ifdef DEBUG
-	std::cout << "Executing reference : " << d.which() << std::endl;
+	std::cout << "Executing reference : " << d->which() << std::endl;
 	#endif
-	if(d.which() == DATA_V_BLO_REF) {
-		int bid = boost::get<blo_ref_t>(d).ref;
+	if(d->which() == DATA_V_BLO_REF) {
+		int bid = boost::get<blo_ref_t>(*d).ref;
 		#ifdef DEBUG
 		std::cout << "Reference is block_ref id: " << bid << " scoping up" << std::endl;
 		#endif
@@ -229,10 +240,10 @@ void Interpreter::executeReference(var_t ref) {
 		std::cout << "Scoping down" << std::endl;
 		#endif
 		ws->variables->scope_down();
-	} else if(d.which() == DATA_V_FUNC) {
-		boost::get<func_t>(d)(this);
+	} else if(d->which() == DATA_V_FUNC) {
+		boost::get<func_t>(*d)(this);
 	} else {
-		ws->stack->push_back(new data(d));
+		ws->stack->push_back(new data(*d));
 	}
 }
 
@@ -242,7 +253,7 @@ void Interpreter::executeVarOperator(var_ope_t ope) {
 		{
 			data* stor = pop_stack();
 			var_t v = ws->var_stack->back();
-			ws->variables->store(v.val, *stor);
+			ws->variables->store(v.val, stor);
 			ws->var_stack->pop_back();
 		}
 		break;
@@ -270,7 +281,10 @@ void Interpreter::executeVarOperator(var_ope_t ope) {
 	}
 }
 
-void Interpreter::executeToken(Token t) {
+void Interpreter::executeToken(Token& t) {
+	#ifdef DEBUG
+	cur_token = &t;
+	#endif
 	switch(t.type) {
 		case TOK_INT:
 			ws->stack->push_back(new data(boost::get<int>(t.value)));
@@ -319,6 +333,9 @@ void Interpreter::executeToken(Token t) {
 }
 
 void Interpreter::executeBlock(int id) {
+	#ifdef DEBUG
+	cur_block = id;
+	#endif
 	Block &b = (*ws->blocks[id]);
 	#ifdef DEBUG
 	std::cout << "Executing block " << id << " size: " << b.tokens.size() << std::endl;
