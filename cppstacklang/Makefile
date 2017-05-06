@@ -12,7 +12,7 @@ LIBS =
 # General compiler flags
 COMPILE_FLAGS = -Wall -std=c++11
 # Additional release-specific flags
-RCOMPILE_FLAGS = -O3
+RCOMPILE_FLAGS = -O3 -g
 # Additional debug-specific flags
 DCOMPILE_FLAGS = -g  -D DEBUG 
 # Add additional include paths

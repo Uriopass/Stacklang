@@ -306,9 +306,9 @@ void Variables::scope_up() {
 void Variables::scope_down() {
 	for(int i = 0 ; i < total_variables ; i++) {
 		unsigned int cut = scopes[i]->back();
+		scopes[i]->pop_back();
 		if(cut < variables[i]->size())
 		{
-			scopes[i]->pop_back();
 			for(int j = 0 ; j < variables[i]->size()-cut ; j++)
 			{
 				delete variables[i]->back();
@@ -357,10 +357,16 @@ void Variables::store(int varId, data* d) {
 	std::cout << "Storing " << varId << " with data " << Printer::out(*d) << std::endl;
 	#endif
 	if(scopes[varId]->back() == variables[varId]->size()) {
+		#ifdef DEBUG
+		std::cout << "Storing by pushing" << std::endl;
+		#endif
 		variables[varId]->push_back(d);
 	} else {
+		#ifdef DEBUG
+		std::cout << "Storing in place" << std::endl;
+		#endif
 		data* p = variables[varId]->back();
-		delete p;
-		p = d;
+		*p = *d;
+		delete d;
 	}
 }

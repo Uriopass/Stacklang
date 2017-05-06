@@ -1,3 +1,5 @@
-/a 0 def
-/b a def
-/a 1 def
+/b {} def
+
+/x 1 def
+b
+/x x def
