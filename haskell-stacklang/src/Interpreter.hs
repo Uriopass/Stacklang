@@ -70,20 +70,20 @@ dup = do
   a <- top
   push a
 
-ifThenElse :: (MonadError StacklangError m, MonadIO m, MonadState Stack m, MonadReader Variables m) => m ()
+ifThenElse :: (MonadEval m) => m ()
 ifThenElse = do
   _else <- pop
   _if   <- pop
   cond  <- pop @Int
   evalFunc (if cond /= 0 then _if else _else)
 
-ifThen :: (MonadError StacklangError m, MonadIO m, MonadState Stack m, MonadReader Variables m) => m ()
+ifThen :: (MonadEval m) => m ()
 ifThen = do
   _if  <- pop
   cond <- pop @Int
   when (cond /= 0) $ evalFunc _if
 
-exec :: (MonadError StacklangError m, MonadIO m, MonadState Stack m, MonadReader Variables m) => m ()
+exec :: (MonadEval m) => m ()
 exec = do
   f <- pop
   evalFunc f
@@ -113,7 +113,7 @@ swap = do
   push a
   push b
 
-stdlib :: (MonadError StacklangError m, MonadIO m, MonadState Stack m, MonadReader Variables m) => Map.Map String (m ())
+stdlib :: (MonadEval m) => Map.Map String (m ())
 stdlib = Map.fromList
   [ ("+"     , binMathOp (+))
   , ("*"     , binMathOp (*))
@@ -141,17 +141,17 @@ stdlib = Map.fromList
   , ("swap"  , swap)
   ]
 
-evalFunc :: (MonadError StacklangError m, MonadIO m, MonadState Stack m, MonadReader Variables m) => [Expr] -> m ()
+evalFunc :: (MonadEval m) => [Expr] -> m ()
 evalFunc []       = return ()
 evalFunc (x : xs) = case x of
   (Atom (Identifier "="  )) -> defineIn (evalFunc xs)
   (Atom (Identifier "def")) -> defineIn (evalFunc xs)
   _                         -> eval x >> evalFunc xs
 
-evalStdlib :: (MonadError StacklangError m, MonadIO m, MonadState Stack m, MonadReader Variables m) => String -> m ()
+evalStdlib :: (MonadEval m) => String -> m ()
 evalStdlib fS = fromMaybe (throwError $ NoSuchFunction fS) (Map.lookup fS stdlib)
 
-eval :: (MonadError StacklangError m, MonadIO m, MonadState Stack m, MonadReader Variables m) => Expr -> m ()
+eval :: (MonadEval m) => Expr -> m ()
 eval (Atom (Identifier s)) = do
   v <- ask
   case Map.lookup s v of

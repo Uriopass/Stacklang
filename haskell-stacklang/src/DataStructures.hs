@@ -1,9 +1,14 @@
 {-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE ConstraintKinds #-}
 
 module DataStructures where
 
 import           Pretty
 import qualified Data.Map                      as Map
+import           Control.Monad.Except
+import           Control.Monad.State
+import           Control.Monad.Reader
 
 data Atom = Number Int | String String | Identifier String | Declaration String
     deriving (Show)
@@ -13,6 +18,8 @@ data Expr = Atom Atom | List [Expr]
 
 type Stack = [Expr]
 type Variables = Map.Map String Expr
+
+type MonadEval m = (MonadError StacklangError m, MonadIO m, MonadState Stack m, MonadReader Variables m)
 
 data StacklangError
     = ParseError String
