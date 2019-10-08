@@ -1,0 +1,13 @@
+/fact 
+{
+	dup 1 >  
+	{
+		dup 1 - fact * 
+	}
+	{
+		pop 1
+	}
+	ifelse
+} =
+
+5 fact

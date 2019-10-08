@@ -1,0 +1,7 @@
+3 2 >
+2 3 <
+3 3 ==
+3 2 >= dup
+{ "3 is greater than 2" }
+{ "2 is greater than 3" }
+?

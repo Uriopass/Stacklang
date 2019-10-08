@@ -1,0 +1,8 @@
+/f {
+ /a 3 =
+ a print
+} =
+
+/a 1 =
+f
+a print
