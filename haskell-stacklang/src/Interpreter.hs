@@ -153,8 +153,8 @@ evalStdlib fS = fromMaybe (throwError $ NoSuchFunction fS) (Map.lookup fS stdlib
 
 eval :: (MonadEval m) => Expr -> m ()
 eval (Atom (Identifier s)) = do
-  v <- ask
-  case Map.lookup s v of
+  res <- reader (Map.lookup s)
+  case res of
     Just x -> case x of
       (List l) -> evalFunc l
       _        -> eval x
