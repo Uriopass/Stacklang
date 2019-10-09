@@ -5,8 +5,14 @@ module Parser where
 import           Text.ParserCombinators.Parsec     hiding ( spaces )
 import           DataStructures
 
+comment :: Parser ()
+comment = do
+    char '#'
+    skipMany (noneOf "\n")
+    optional spaces
+
 spaces :: Parser ()
-spaces = skipMany1 space
+spaces = comment <|> (skipMany1 space >> optional comment)
 
 number :: Parser Atom
 number = Number . read <$> many1 digit
@@ -36,7 +42,7 @@ instruction :: Parser Expr
 instruction = do
   optional spaces
   x <- expr
-  lookAhead (space <|> char '}')
+  lookAhead (space <|> char '}' <|> char '#')
   optional spaces
   return x
 
