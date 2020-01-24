@@ -1,5 +1,5 @@
 # Stacklang
-An home-made interpreter written in Python3 for a custom stack-based language heavily inspired from PostScript
+An home-made interpreter written in Python3 and C++ and Haskell (all independent implementations) for a custom stack-based language heavily inspired from PostScript
 
 ### How to install :
 1. Install python3 if you don't have it already  
